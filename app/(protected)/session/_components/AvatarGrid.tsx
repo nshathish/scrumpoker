@@ -39,7 +39,7 @@ export function AvatarGrid({
               : 'ring-2 ring-transparent'
           }`}
         >
-          <div className="rounded-full overflow-hidden">
+          <div className="overflow-hidden rounded-full">
             <Image
               src={`/api/avatar?seed=${encodeURIComponent(seed)}&v=2`}
               alt={seed}

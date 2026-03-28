@@ -35,13 +35,18 @@ export default function UserMenu({ email, isRegistered }: UserMenuProps) {
     <>
       <DropdownMenu.Root>
         <DropdownMenu.Trigger>
-          <button className="cursor-pointer rounded-full outline-none focus-visible:ring-2 focus-visible:ring-offset-2">
-            <Avatar
-              src={`https://api.dicebear.com/9.x/bottts/svg?seed=${seed}`}
-              fallback="?"
-              size="3"
-              radius="full"
-            />
+          <button
+            type="button"
+            className="cursor-pointer rounded-full outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+          >
+            <span className="avatar-face-ring inline-flex">
+              <Avatar
+                src={`https://api.dicebear.com/9.x/bottts/svg?seed=${seed}`}
+                fallback="?"
+                size="3"
+                radius="full"
+              />
+            </span>
           </button>
         </DropdownMenu.Trigger>
 

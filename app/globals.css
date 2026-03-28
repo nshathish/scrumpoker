@@ -66,6 +66,11 @@ body {
 }
 
 @layer components {
+  /* Navbar UserMenu avatar only */
+  .avatar-face-ring {
+    @apply box-border rounded-full border-[3px] border-black bg-white p-1 shadow-[0_4px_14px_rgba(0,0,0,0.14)];
+  }
+
   .poker-card {
     @apply box-border flex aspect-[3/4] w-12 shrink-0 cursor-pointer select-none items-center justify-center rounded-xl border-2 border-transparent;
     @apply bg-slate-900 font-medium text-white sm:w-14;

@@ -1,17 +1,23 @@
 'use client';
 
-import Image from 'next/image';
 import { Dialog, Button, Flex } from '@radix-ui/themes';
 
-import { AvatarGrid } from '@/app/(home)/_components/AvatarGrid';
-import { useCurrentAvatar } from '@/app/(home)/_components/CurrentAvatarContext';
+import { AvatarGrid } from '@/app/(protected)/session/_components/AvatarGrid';
+import { useCurrentAvatar } from '@/components/avatar/CurrentAvatarContext';
 
-export interface AvatarModalProps {
+interface AvatarModalProps {
   seeds: string[];
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
   onAvatarChange?: (seed: string) => void;
 }
 
-export function AvatarModal({ seeds, onAvatarChange }: AvatarModalProps) {
+export function AvatarModal({
+  seeds,
+  onAvatarChange,
+  open,
+  onOpenChange,
+}: AvatarModalProps) {
   const { seed, setSeed } = useCurrentAvatar();
 
   const handleSelect = (next: string) => {
@@ -20,21 +26,7 @@ export function AvatarModal({ seeds, onAvatarChange }: AvatarModalProps) {
   };
 
   return (
-    <Dialog.Root>
-      <Dialog.Trigger>
-        <button className="fixed right-6 top-6 z-50 rounded-full bg-white shadow-lg p-1 hover:scale-105 transition">
-          <Image
-            src={`/api/avatar?seed=${encodeURIComponent(seed)}`}
-            alt="Your avatar"
-            width={56}
-            height={56}
-            unoptimized
-            loading="eager"
-            className="rounded-full"
-          />
-        </button>
-      </Dialog.Trigger>
-
+    <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Content maxWidth="480px">
         <Dialog.Title>Select Your Avatar</Dialog.Title>
         <Dialog.Description size="2" mb="4">

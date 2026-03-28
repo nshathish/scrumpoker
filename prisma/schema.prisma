@@ -1,0 +1,125 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id          String   @id @default(uuid()) @db.Uuid
+  authId      String?  @unique @map("auth_id") @db.Uuid
+  displayName String   @map("display_name")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  ownedTeams    Team[]
+  teamMembers   TeamMember[]
+  ownedSessions Session[]
+  participants  Participant[]
+
+  @@map("users")
+}
+
+model Team {
+  id         String   @id @default(uuid()) @db.Uuid
+  name       String
+  inviteCode String   @unique @default(cuid()) @map("invite_code")
+  ownerId    String   @map("owner_id") @db.Uuid
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  owner    User         @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  members  TeamMember[]
+  sessions Session[]
+
+  @@map("teams")
+}
+
+model TeamMember {
+  id       String   @id @default(uuid()) @db.Uuid
+  userId   String   @map("user_id") @db.Uuid
+  teamId   String   @map("team_id") @db.Uuid
+  role     TeamRole @default(MEMBER)
+  joinedAt DateTime @default(now()) @map("joined_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  team Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, teamId])
+  @@map("team_members")
+}
+
+enum TeamRole {
+  ADMIN
+  MEMBER
+}
+
+model Session {
+  id         String        @id @default(uuid()) @db.Uuid
+  name       String
+  inviteCode String        @unique @default(cuid()) @map("invite_code")
+  status     SessionStatus @default(VOTING)
+  ownerId    String        @map("owner_id") @db.Uuid
+  teamId     String?       @map("team_id") @db.Uuid
+  deckId     String        @map("deck_id") @db.Uuid
+  createdAt  DateTime      @default(now()) @map("created_at")
+  updatedAt  DateTime      @updatedAt @map("updated_at")
+
+  owner        User          @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  team         Team?         @relation(fields: [teamId], references: [id], onDelete: SetNull)
+  deck         Deck          @relation(fields: [deckId], references: [id])
+  participants Participant[]
+
+  @@map("sessions")
+}
+
+enum SessionStatus {
+  LOBBY
+  VOTING
+  REVEALED
+  FINISHED
+}
+
+model Participant {
+  id        String          @id @default(uuid()) @db.Uuid
+  sessionId String          @map("session_id") @db.Uuid
+  userId    String          @map("user_id") @db.Uuid
+  role      ParticipantRole @default(VOTER)
+  joinedAt  DateTime        @default(now()) @map("joined_at")
+
+  session Session @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  votes Vote[]
+
+  @@unique([sessionId, userId])
+  @@map("participants")
+}
+
+enum ParticipantRole {
+  VOTER
+  SPECTATOR
+}
+
+model Deck {
+  id    String   @id @default(uuid()) @db.Uuid
+  name  String   @unique
+  cards String[]
+
+  sessions Session[]
+
+  @@map("decks")
+}
+
+model Vote {
+  id            String @id @default(uuid()) @db.Uuid
+  sessionId     String @map("session_id") @db.Uuid
+  participantId String @map("participant_id") @db.Uuid
+  round         Int    @default(1)
+  value         String
+
+  participant Participant @relation(fields: [participantId], references: [id], onDelete: Cascade)
+
+  @@unique([sessionId, participantId, round])
+  @@map("votes")
+}

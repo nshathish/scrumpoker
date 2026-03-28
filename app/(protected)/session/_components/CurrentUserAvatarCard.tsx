@@ -1,7 +1,7 @@
 'use client';
 
-import { AvatarProfileCard } from '@/app/(home)/_components/AvatarProfileCard';
-import { useCurrentAvatar } from '@/app/(home)/_components/CurrentAvatarContext';
+import { AvatarProfileCard } from '@/app/(protected)/session/_components/AvatarProfileCard';
+import { useCurrentAvatar } from '@/components/avatar/CurrentAvatarContext';
 
 export function CurrentUserAvatarCard({
   displayName,

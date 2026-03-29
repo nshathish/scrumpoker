@@ -1,18 +1,20 @@
 import { ReactNode } from 'react';
 
-import { CurrentAvatarProvider } from '@/components/avatar/CurrentAvatarContext';
 import ProtectedNavbar from '@/components/shared/ProtectedNavbar';
 import Sidebar from '@/components/shared/Sidebar';
+import { CurrentAvatarProvider } from '@/components/avatar/CurrentAvatarContext';
+
+import { getAuthenticatedUser } from '@/lib/auth';
 
 export default async function ProtectedLayout({
   children,
 }: {
   children: ReactNode;
 }) {
-  const assignedSeed = 'monkey1';
+  const user = await getAuthenticatedUser();
 
   return (
-    <CurrentAvatarProvider initialSeed={assignedSeed}>
+    <CurrentAvatarProvider initialSeed={user?.avatarSeed ?? 'default'}>
       <ProtectedNavbar />
       <div className="flex flex-1">
         <Sidebar />

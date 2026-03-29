@@ -8,6 +8,7 @@ import AvatarModal from '@/components/avatar/AvatarModal';
 import { useCurrentAvatar } from '@/components/avatar/CurrentAvatarContext';
 
 import { logout } from '@/app/auth/actions';
+import { getAvatarUrl } from '@/lib/utils/avatar';
 
 interface UserMenuProps {
   email?: string;
@@ -43,7 +44,7 @@ export default function UserMenu({ email, isRegistered }: UserMenuProps) {
           >
             <span className="avatar-face-ring inline-flex">
               <Avatar
-                src={`https://api.dicebear.com/9.x/bottts/svg?seed=${seed}`}
+                src={getAvatarUrl(seed)}
                 fallback="?"
                 size="3"
                 radius="full"

@@ -7,6 +7,7 @@ import prisma from '@/lib/prisma';
 type CurrentUser = {
   id: string;
   displayName: string;
+  avatarSeed: string;
   email?: string;
   isRegistered: boolean;
 };
@@ -28,6 +29,7 @@ export async function getAuthenticatedUser(): Promise<CurrentUser | null> {
       return {
         id: user.id,
         displayName: user.displayName,
+        avatarSeed: user.avatarSeed,
         email: authUser.email,
         isRegistered: true,
       };
@@ -46,6 +48,7 @@ export async function getAuthenticatedUser(): Promise<CurrentUser | null> {
       return {
         id: user.id,
         displayName: user.displayName,
+        avatarSeed: user.avatarSeed,
         isRegistered: false,
       };
     }

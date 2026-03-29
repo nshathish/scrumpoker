@@ -15,6 +15,16 @@ export async function createGuestUser(displayName: string) {
   }
 
   return prisma.user.create({
-    data: { displayName: normalized },
+    data: {
+      displayName: normalized,
+      avatarSeed: normalized,
+    },
+  });
+}
+
+export async function updateAvatarSeed(userId: string, avatarSeed: string) {
+  return prisma.user.update({
+    where: { id: userId },
+    data: { avatarSeed },
   });
 }

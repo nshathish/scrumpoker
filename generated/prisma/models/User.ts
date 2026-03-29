@@ -28,6 +28,7 @@ export type UserMinAggregateOutputType = {
   id: string | null
   authId: string | null
   displayName: string | null
+  avatarSeed: string | null
   createdAt: Date | null
 }
 
@@ -35,6 +36,7 @@ export type UserMaxAggregateOutputType = {
   id: string | null
   authId: string | null
   displayName: string | null
+  avatarSeed: string | null
   createdAt: Date | null
 }
 
@@ -42,6 +44,7 @@ export type UserCountAggregateOutputType = {
   id: number
   authId: number
   displayName: number
+  avatarSeed: number
   createdAt: number
   _all: number
 }
@@ -51,6 +54,7 @@ export type UserMinAggregateInputType = {
   id?: true
   authId?: true
   displayName?: true
+  avatarSeed?: true
   createdAt?: true
 }
 
@@ -58,6 +62,7 @@ export type UserMaxAggregateInputType = {
   id?: true
   authId?: true
   displayName?: true
+  avatarSeed?: true
   createdAt?: true
 }
 
@@ -65,6 +70,7 @@ export type UserCountAggregateInputType = {
   id?: true
   authId?: true
   displayName?: true
+  avatarSeed?: true
   createdAt?: true
   _all?: true
 }
@@ -145,6 +151,7 @@ export type UserGroupByOutputType = {
   id: string
   authId: string | null
   displayName: string
+  avatarSeed: string
   createdAt: Date
   _count: UserCountAggregateOutputType | null
   _min: UserMinAggregateOutputType | null
@@ -173,6 +180,7 @@ export type UserWhereInput = {
   id?: Prisma.UuidFilter<"User"> | string
   authId?: Prisma.UuidNullableFilter<"User"> | string | null
   displayName?: Prisma.StringFilter<"User"> | string
+  avatarSeed?: Prisma.StringFilter<"User"> | string
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   ownedTeams?: Prisma.TeamListRelationFilter
   teamMembers?: Prisma.TeamMemberListRelationFilter
@@ -184,6 +192,7 @@ export type UserOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   authId?: Prisma.SortOrderInput | Prisma.SortOrder
   displayName?: Prisma.SortOrder
+  avatarSeed?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   ownedTeams?: Prisma.TeamOrderByRelationAggregateInput
   teamMembers?: Prisma.TeamMemberOrderByRelationAggregateInput
@@ -198,6 +207,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.UserWhereInput[]
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   displayName?: Prisma.StringFilter<"User"> | string
+  avatarSeed?: Prisma.StringFilter<"User"> | string
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   ownedTeams?: Prisma.TeamListRelationFilter
   teamMembers?: Prisma.TeamMemberListRelationFilter
@@ -209,6 +219,7 @@ export type UserOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   authId?: Prisma.SortOrderInput | Prisma.SortOrder
   displayName?: Prisma.SortOrder
+  avatarSeed?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
   _max?: Prisma.UserMaxOrderByAggregateInput
@@ -222,6 +233,7 @@ export type UserScalarWhereWithAggregatesInput = {
   id?: Prisma.UuidWithAggregatesFilter<"User"> | string
   authId?: Prisma.UuidNullableWithAggregatesFilter<"User"> | string | null
   displayName?: Prisma.StringWithAggregatesFilter<"User"> | string
+  avatarSeed?: Prisma.StringWithAggregatesFilter<"User"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
 }
 
@@ -229,6 +241,7 @@ export type UserCreateInput = {
   id?: string
   authId?: string | null
   displayName: string
+  avatarSeed?: string
   createdAt?: Date | string
   ownedTeams?: Prisma.TeamCreateNestedManyWithoutOwnerInput
   teamMembers?: Prisma.TeamMemberCreateNestedManyWithoutUserInput
@@ -240,6 +253,7 @@ export type UserUncheckedCreateInput = {
   id?: string
   authId?: string | null
   displayName: string
+  avatarSeed?: string
   createdAt?: Date | string
   ownedTeams?: Prisma.TeamUncheckedCreateNestedManyWithoutOwnerInput
   teamMembers?: Prisma.TeamMemberUncheckedCreateNestedManyWithoutUserInput
@@ -251,6 +265,7 @@ export type UserUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   authId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarSeed?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ownedTeams?: Prisma.TeamUpdateManyWithoutOwnerNestedInput
   teamMembers?: Prisma.TeamMemberUpdateManyWithoutUserNestedInput
@@ -262,6 +277,7 @@ export type UserUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   authId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarSeed?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ownedTeams?: Prisma.TeamUncheckedUpdateManyWithoutOwnerNestedInput
   teamMembers?: Prisma.TeamMemberUncheckedUpdateManyWithoutUserNestedInput
@@ -273,6 +289,7 @@ export type UserCreateManyInput = {
   id?: string
   authId?: string | null
   displayName: string
+  avatarSeed?: string
   createdAt?: Date | string
 }
 
@@ -280,6 +297,7 @@ export type UserUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   authId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarSeed?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -287,6 +305,7 @@ export type UserUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   authId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarSeed?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -294,6 +313,7 @@ export type UserCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   authId?: Prisma.SortOrder
   displayName?: Prisma.SortOrder
+  avatarSeed?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -301,6 +321,7 @@ export type UserMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   authId?: Prisma.SortOrder
   displayName?: Prisma.SortOrder
+  avatarSeed?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -308,6 +329,7 @@ export type UserMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   authId?: Prisma.SortOrder
   displayName?: Prisma.SortOrder
+  avatarSeed?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -388,6 +410,7 @@ export type UserCreateWithoutOwnedTeamsInput = {
   id?: string
   authId?: string | null
   displayName: string
+  avatarSeed?: string
   createdAt?: Date | string
   teamMembers?: Prisma.TeamMemberCreateNestedManyWithoutUserInput
   ownedSessions?: Prisma.SessionCreateNestedManyWithoutOwnerInput
@@ -398,6 +421,7 @@ export type UserUncheckedCreateWithoutOwnedTeamsInput = {
   id?: string
   authId?: string | null
   displayName: string
+  avatarSeed?: string
   createdAt?: Date | string
   teamMembers?: Prisma.TeamMemberUncheckedCreateNestedManyWithoutUserInput
   ownedSessions?: Prisma.SessionUncheckedCreateNestedManyWithoutOwnerInput
@@ -424,6 +448,7 @@ export type UserUpdateWithoutOwnedTeamsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   authId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarSeed?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   teamMembers?: Prisma.TeamMemberUpdateManyWithoutUserNestedInput
   ownedSessions?: Prisma.SessionUpdateManyWithoutOwnerNestedInput
@@ -434,6 +459,7 @@ export type UserUncheckedUpdateWithoutOwnedTeamsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   authId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarSeed?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   teamMembers?: Prisma.TeamMemberUncheckedUpdateManyWithoutUserNestedInput
   ownedSessions?: Prisma.SessionUncheckedUpdateManyWithoutOwnerNestedInput
@@ -444,6 +470,7 @@ export type UserCreateWithoutTeamMembersInput = {
   id?: string
   authId?: string | null
   displayName: string
+  avatarSeed?: string
   createdAt?: Date | string
   ownedTeams?: Prisma.TeamCreateNestedManyWithoutOwnerInput
   ownedSessions?: Prisma.SessionCreateNestedManyWithoutOwnerInput
@@ -454,6 +481,7 @@ export type UserUncheckedCreateWithoutTeamMembersInput = {
   id?: string
   authId?: string | null
   displayName: string
+  avatarSeed?: string
   createdAt?: Date | string
   ownedTeams?: Prisma.TeamUncheckedCreateNestedManyWithoutOwnerInput
   ownedSessions?: Prisma.SessionUncheckedCreateNestedManyWithoutOwnerInput
@@ -480,6 +508,7 @@ export type UserUpdateWithoutTeamMembersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   authId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarSeed?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ownedTeams?: Prisma.TeamUpdateManyWithoutOwnerNestedInput
   ownedSessions?: Prisma.SessionUpdateManyWithoutOwnerNestedInput
@@ -490,6 +519,7 @@ export type UserUncheckedUpdateWithoutTeamMembersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   authId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarSeed?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ownedTeams?: Prisma.TeamUncheckedUpdateManyWithoutOwnerNestedInput
   ownedSessions?: Prisma.SessionUncheckedUpdateManyWithoutOwnerNestedInput
@@ -500,6 +530,7 @@ export type UserCreateWithoutOwnedSessionsInput = {
   id?: string
   authId?: string | null
   displayName: string
+  avatarSeed?: string
   createdAt?: Date | string
   ownedTeams?: Prisma.TeamCreateNestedManyWithoutOwnerInput
   teamMembers?: Prisma.TeamMemberCreateNestedManyWithoutUserInput
@@ -510,6 +541,7 @@ export type UserUncheckedCreateWithoutOwnedSessionsInput = {
   id?: string
   authId?: string | null
   displayName: string
+  avatarSeed?: string
   createdAt?: Date | string
   ownedTeams?: Prisma.TeamUncheckedCreateNestedManyWithoutOwnerInput
   teamMembers?: Prisma.TeamMemberUncheckedCreateNestedManyWithoutUserInput
@@ -536,6 +568,7 @@ export type UserUpdateWithoutOwnedSessionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   authId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarSeed?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ownedTeams?: Prisma.TeamUpdateManyWithoutOwnerNestedInput
   teamMembers?: Prisma.TeamMemberUpdateManyWithoutUserNestedInput
@@ -546,6 +579,7 @@ export type UserUncheckedUpdateWithoutOwnedSessionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   authId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarSeed?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ownedTeams?: Prisma.TeamUncheckedUpdateManyWithoutOwnerNestedInput
   teamMembers?: Prisma.TeamMemberUncheckedUpdateManyWithoutUserNestedInput
@@ -556,6 +590,7 @@ export type UserCreateWithoutParticipantsInput = {
   id?: string
   authId?: string | null
   displayName: string
+  avatarSeed?: string
   createdAt?: Date | string
   ownedTeams?: Prisma.TeamCreateNestedManyWithoutOwnerInput
   teamMembers?: Prisma.TeamMemberCreateNestedManyWithoutUserInput
@@ -566,6 +601,7 @@ export type UserUncheckedCreateWithoutParticipantsInput = {
   id?: string
   authId?: string | null
   displayName: string
+  avatarSeed?: string
   createdAt?: Date | string
   ownedTeams?: Prisma.TeamUncheckedCreateNestedManyWithoutOwnerInput
   teamMembers?: Prisma.TeamMemberUncheckedCreateNestedManyWithoutUserInput
@@ -592,6 +628,7 @@ export type UserUpdateWithoutParticipantsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   authId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarSeed?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ownedTeams?: Prisma.TeamUpdateManyWithoutOwnerNestedInput
   teamMembers?: Prisma.TeamMemberUpdateManyWithoutUserNestedInput
@@ -602,6 +639,7 @@ export type UserUncheckedUpdateWithoutParticipantsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   authId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarSeed?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ownedTeams?: Prisma.TeamUncheckedUpdateManyWithoutOwnerNestedInput
   teamMembers?: Prisma.TeamMemberUncheckedUpdateManyWithoutUserNestedInput
@@ -670,6 +708,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   id?: boolean
   authId?: boolean
   displayName?: boolean
+  avatarSeed?: boolean
   createdAt?: boolean
   ownedTeams?: boolean | Prisma.User$ownedTeamsArgs<ExtArgs>
   teamMembers?: boolean | Prisma.User$teamMembersArgs<ExtArgs>
@@ -682,6 +721,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   id?: boolean
   authId?: boolean
   displayName?: boolean
+  avatarSeed?: boolean
   createdAt?: boolean
 }, ExtArgs["result"]["user"]>
 
@@ -689,6 +729,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   id?: boolean
   authId?: boolean
   displayName?: boolean
+  avatarSeed?: boolean
   createdAt?: boolean
 }, ExtArgs["result"]["user"]>
 
@@ -696,10 +737,11 @@ export type UserSelectScalar = {
   id?: boolean
   authId?: boolean
   displayName?: boolean
+  avatarSeed?: boolean
   createdAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "authId" | "displayName" | "createdAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "authId" | "displayName" | "avatarSeed" | "createdAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   ownedTeams?: boolean | Prisma.User$ownedTeamsArgs<ExtArgs>
   teamMembers?: boolean | Prisma.User$teamMembersArgs<ExtArgs>
@@ -722,6 +764,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     id: string
     authId: string | null
     displayName: string
+    avatarSeed: string
     createdAt: Date
   }, ExtArgs["result"]["user"]>
   composites: {}
@@ -1153,6 +1196,7 @@ export interface UserFieldRefs {
   readonly id: Prisma.FieldRef<"User", 'String'>
   readonly authId: Prisma.FieldRef<"User", 'String'>
   readonly displayName: Prisma.FieldRef<"User", 'String'>
+  readonly avatarSeed: Prisma.FieldRef<"User", 'String'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
 }
     

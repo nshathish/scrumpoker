@@ -49,7 +49,7 @@ export async function bootstrapNewSession({
 export async function getOrJoinSession(inviteCode: string) {
   const user = await getAuthenticatedUser();
 
-  const session = await findSessionByInviteCode(inviteCode);
+  let session = await findSessionByInviteCode(inviteCode);
   if (!session) {
     notFound();
   }
@@ -61,6 +61,11 @@ export async function getOrJoinSession(inviteCode: string) {
       userId: user!.id,
       role: 'VOTER',
     });
+    session = await findSessionByInviteCode(inviteCode);
+  }
+
+  if (!session) {
+    notFound();
   }
 
   return { session, currentUserId: user!.id };

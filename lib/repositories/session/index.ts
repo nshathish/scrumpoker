@@ -90,3 +90,9 @@ export async function isParticipant(sessionId: string, userId: string) {
   });
   return Boolean(participant);
 }
+
+export async function deleteParticipantsByUserId(userId: string) {
+  return prisma.participant.deleteMany({
+    where: { userId },
+  });
+}

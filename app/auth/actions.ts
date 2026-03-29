@@ -15,6 +15,8 @@ import {
   GuestSchema,
 } from '@/lib/schemas';
 
+import { getAuthenticatedUser } from '@/lib/auth';
+import { deleteParticipantsByUserId } from '@/lib/repositories/session';
 import { createGuestUser } from '@/lib/repositories/user';
 import { actionError, actionSuccess, type ActionResult } from '@/lib/types';
 
@@ -78,6 +80,11 @@ export async function signup(values: SignupFormType): Promise<ActionResult> {
 }
 
 export async function logout(): Promise<void> {
+  const user = await getAuthenticatedUser();
+  if (user) {
+    await deleteParticipantsByUserId(user.id);
+  }
+
   const cookieStore = await cookies();
   cookieStore.delete({ name: 'guest_user_id', path: '/' });
 

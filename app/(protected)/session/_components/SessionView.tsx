@@ -7,6 +7,8 @@ import ProfileCard from '@/app/(protected)/session/_components/ProfileCard';
 import PokerPoints from '@/app/(protected)/session/_components/PokerPoints';
 import { useCurrentAvatar } from '@/components/avatar/CurrentAvatarContext';
 
+import { useSessionRealtime } from '@/lib/hooks/use-session-realtime';
+
 import type { SessionGetPayload } from '@/generated/prisma/models/Session';
 
 type SessionWithParticipants = SessionGetPayload<{
@@ -37,6 +39,7 @@ export default function SessionView({
 }: SessionViewProps) {
   const { seed } = useCurrentAvatar();
   const [estimate, setEstimate] = useState('');
+  useSessionRealtime(session.id);
 
   const currentUser = session.participants.find(
     (p) => p.userId === currentUserId,

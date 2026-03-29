@@ -34,6 +34,7 @@ export type SessionMinAggregateOutputType = {
   deckId: string | null
   createdAt: Date | null
   updatedAt: Date | null
+  expiresAt: Date | null
 }
 
 export type SessionMaxAggregateOutputType = {
@@ -46,6 +47,7 @@ export type SessionMaxAggregateOutputType = {
   deckId: string | null
   createdAt: Date | null
   updatedAt: Date | null
+  expiresAt: Date | null
 }
 
 export type SessionCountAggregateOutputType = {
@@ -58,6 +60,7 @@ export type SessionCountAggregateOutputType = {
   deckId: number
   createdAt: number
   updatedAt: number
+  expiresAt: number
   _all: number
 }
 
@@ -72,6 +75,7 @@ export type SessionMinAggregateInputType = {
   deckId?: true
   createdAt?: true
   updatedAt?: true
+  expiresAt?: true
 }
 
 export type SessionMaxAggregateInputType = {
@@ -84,6 +88,7 @@ export type SessionMaxAggregateInputType = {
   deckId?: true
   createdAt?: true
   updatedAt?: true
+  expiresAt?: true
 }
 
 export type SessionCountAggregateInputType = {
@@ -96,6 +101,7 @@ export type SessionCountAggregateInputType = {
   deckId?: true
   createdAt?: true
   updatedAt?: true
+  expiresAt?: true
   _all?: true
 }
 
@@ -181,6 +187,7 @@ export type SessionGroupByOutputType = {
   deckId: string
   createdAt: Date
   updatedAt: Date
+  expiresAt: Date
   _count: SessionCountAggregateOutputType | null
   _min: SessionMinAggregateOutputType | null
   _max: SessionMaxAggregateOutputType | null
@@ -214,6 +221,7 @@ export type SessionWhereInput = {
   deckId?: Prisma.UuidFilter<"Session"> | string
   createdAt?: Prisma.DateTimeFilter<"Session"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Session"> | Date | string
+  expiresAt?: Prisma.DateTimeFilter<"Session"> | Date | string
   owner?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   team?: Prisma.XOR<Prisma.TeamNullableScalarRelationFilter, Prisma.TeamWhereInput> | null
   deck?: Prisma.XOR<Prisma.DeckScalarRelationFilter, Prisma.DeckWhereInput>
@@ -230,6 +238,7 @@ export type SessionOrderByWithRelationInput = {
   deckId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  expiresAt?: Prisma.SortOrder
   owner?: Prisma.UserOrderByWithRelationInput
   team?: Prisma.TeamOrderByWithRelationInput
   deck?: Prisma.DeckOrderByWithRelationInput
@@ -249,6 +258,7 @@ export type SessionWhereUniqueInput = Prisma.AtLeast<{
   deckId?: Prisma.UuidFilter<"Session"> | string
   createdAt?: Prisma.DateTimeFilter<"Session"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Session"> | Date | string
+  expiresAt?: Prisma.DateTimeFilter<"Session"> | Date | string
   owner?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   team?: Prisma.XOR<Prisma.TeamNullableScalarRelationFilter, Prisma.TeamWhereInput> | null
   deck?: Prisma.XOR<Prisma.DeckScalarRelationFilter, Prisma.DeckWhereInput>
@@ -265,6 +275,7 @@ export type SessionOrderByWithAggregationInput = {
   deckId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  expiresAt?: Prisma.SortOrder
   _count?: Prisma.SessionCountOrderByAggregateInput
   _max?: Prisma.SessionMaxOrderByAggregateInput
   _min?: Prisma.SessionMinOrderByAggregateInput
@@ -283,6 +294,7 @@ export type SessionScalarWhereWithAggregatesInput = {
   deckId?: Prisma.UuidWithAggregatesFilter<"Session"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Session"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Session"> | Date | string
+  expiresAt?: Prisma.DateTimeWithAggregatesFilter<"Session"> | Date | string
 }
 
 export type SessionCreateInput = {
@@ -292,6 +304,7 @@ export type SessionCreateInput = {
   status?: $Enums.SessionStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  expiresAt: Date | string
   owner: Prisma.UserCreateNestedOneWithoutOwnedSessionsInput
   team?: Prisma.TeamCreateNestedOneWithoutSessionsInput
   deck: Prisma.DeckCreateNestedOneWithoutSessionsInput
@@ -308,6 +321,7 @@ export type SessionUncheckedCreateInput = {
   deckId: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  expiresAt: Date | string
   participants?: Prisma.ParticipantUncheckedCreateNestedManyWithoutSessionInput
 }
 
@@ -318,6 +332,7 @@ export type SessionUpdateInput = {
   status?: Prisma.EnumSessionStatusFieldUpdateOperationsInput | $Enums.SessionStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   owner?: Prisma.UserUpdateOneRequiredWithoutOwnedSessionsNestedInput
   team?: Prisma.TeamUpdateOneWithoutSessionsNestedInput
   deck?: Prisma.DeckUpdateOneRequiredWithoutSessionsNestedInput
@@ -334,6 +349,7 @@ export type SessionUncheckedUpdateInput = {
   deckId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   participants?: Prisma.ParticipantUncheckedUpdateManyWithoutSessionNestedInput
 }
 
@@ -347,6 +363,7 @@ export type SessionCreateManyInput = {
   deckId: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  expiresAt: Date | string
 }
 
 export type SessionUpdateManyMutationInput = {
@@ -356,6 +373,7 @@ export type SessionUpdateManyMutationInput = {
   status?: Prisma.EnumSessionStatusFieldUpdateOperationsInput | $Enums.SessionStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type SessionUncheckedUpdateManyInput = {
@@ -368,6 +386,7 @@ export type SessionUncheckedUpdateManyInput = {
   deckId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type SessionListRelationFilter = {
@@ -390,6 +409,7 @@ export type SessionCountOrderByAggregateInput = {
   deckId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  expiresAt?: Prisma.SortOrder
 }
 
 export type SessionMaxOrderByAggregateInput = {
@@ -402,6 +422,7 @@ export type SessionMaxOrderByAggregateInput = {
   deckId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  expiresAt?: Prisma.SortOrder
 }
 
 export type SessionMinOrderByAggregateInput = {
@@ -414,6 +435,7 @@ export type SessionMinOrderByAggregateInput = {
   deckId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  expiresAt?: Prisma.SortOrder
 }
 
 export type SessionScalarRelationFilter = {
@@ -572,6 +594,7 @@ export type SessionCreateWithoutOwnerInput = {
   status?: $Enums.SessionStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  expiresAt: Date | string
   team?: Prisma.TeamCreateNestedOneWithoutSessionsInput
   deck: Prisma.DeckCreateNestedOneWithoutSessionsInput
   participants?: Prisma.ParticipantCreateNestedManyWithoutSessionInput
@@ -586,6 +609,7 @@ export type SessionUncheckedCreateWithoutOwnerInput = {
   deckId: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  expiresAt: Date | string
   participants?: Prisma.ParticipantUncheckedCreateNestedManyWithoutSessionInput
 }
 
@@ -628,6 +652,7 @@ export type SessionScalarWhereInput = {
   deckId?: Prisma.UuidFilter<"Session"> | string
   createdAt?: Prisma.DateTimeFilter<"Session"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Session"> | Date | string
+  expiresAt?: Prisma.DateTimeFilter<"Session"> | Date | string
 }
 
 export type SessionCreateWithoutTeamInput = {
@@ -637,6 +662,7 @@ export type SessionCreateWithoutTeamInput = {
   status?: $Enums.SessionStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  expiresAt: Date | string
   owner: Prisma.UserCreateNestedOneWithoutOwnedSessionsInput
   deck: Prisma.DeckCreateNestedOneWithoutSessionsInput
   participants?: Prisma.ParticipantCreateNestedManyWithoutSessionInput
@@ -651,6 +677,7 @@ export type SessionUncheckedCreateWithoutTeamInput = {
   deckId: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  expiresAt: Date | string
   participants?: Prisma.ParticipantUncheckedCreateNestedManyWithoutSessionInput
 }
 
@@ -687,6 +714,7 @@ export type SessionCreateWithoutParticipantsInput = {
   status?: $Enums.SessionStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  expiresAt: Date | string
   owner: Prisma.UserCreateNestedOneWithoutOwnedSessionsInput
   team?: Prisma.TeamCreateNestedOneWithoutSessionsInput
   deck: Prisma.DeckCreateNestedOneWithoutSessionsInput
@@ -702,6 +730,7 @@ export type SessionUncheckedCreateWithoutParticipantsInput = {
   deckId: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  expiresAt: Date | string
 }
 
 export type SessionCreateOrConnectWithoutParticipantsInput = {
@@ -727,6 +756,7 @@ export type SessionUpdateWithoutParticipantsInput = {
   status?: Prisma.EnumSessionStatusFieldUpdateOperationsInput | $Enums.SessionStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   owner?: Prisma.UserUpdateOneRequiredWithoutOwnedSessionsNestedInput
   team?: Prisma.TeamUpdateOneWithoutSessionsNestedInput
   deck?: Prisma.DeckUpdateOneRequiredWithoutSessionsNestedInput
@@ -742,6 +772,7 @@ export type SessionUncheckedUpdateWithoutParticipantsInput = {
   deckId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type SessionCreateWithoutDeckInput = {
@@ -751,6 +782,7 @@ export type SessionCreateWithoutDeckInput = {
   status?: $Enums.SessionStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  expiresAt: Date | string
   owner: Prisma.UserCreateNestedOneWithoutOwnedSessionsInput
   team?: Prisma.TeamCreateNestedOneWithoutSessionsInput
   participants?: Prisma.ParticipantCreateNestedManyWithoutSessionInput
@@ -765,6 +797,7 @@ export type SessionUncheckedCreateWithoutDeckInput = {
   teamId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  expiresAt: Date | string
   participants?: Prisma.ParticipantUncheckedCreateNestedManyWithoutSessionInput
 }
 
@@ -803,6 +836,7 @@ export type SessionCreateManyOwnerInput = {
   deckId: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  expiresAt: Date | string
 }
 
 export type SessionUpdateWithoutOwnerInput = {
@@ -812,6 +846,7 @@ export type SessionUpdateWithoutOwnerInput = {
   status?: Prisma.EnumSessionStatusFieldUpdateOperationsInput | $Enums.SessionStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   team?: Prisma.TeamUpdateOneWithoutSessionsNestedInput
   deck?: Prisma.DeckUpdateOneRequiredWithoutSessionsNestedInput
   participants?: Prisma.ParticipantUpdateManyWithoutSessionNestedInput
@@ -826,6 +861,7 @@ export type SessionUncheckedUpdateWithoutOwnerInput = {
   deckId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   participants?: Prisma.ParticipantUncheckedUpdateManyWithoutSessionNestedInput
 }
 
@@ -838,6 +874,7 @@ export type SessionUncheckedUpdateManyWithoutOwnerInput = {
   deckId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type SessionCreateManyTeamInput = {
@@ -849,6 +886,7 @@ export type SessionCreateManyTeamInput = {
   deckId: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  expiresAt: Date | string
 }
 
 export type SessionUpdateWithoutTeamInput = {
@@ -858,6 +896,7 @@ export type SessionUpdateWithoutTeamInput = {
   status?: Prisma.EnumSessionStatusFieldUpdateOperationsInput | $Enums.SessionStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   owner?: Prisma.UserUpdateOneRequiredWithoutOwnedSessionsNestedInput
   deck?: Prisma.DeckUpdateOneRequiredWithoutSessionsNestedInput
   participants?: Prisma.ParticipantUpdateManyWithoutSessionNestedInput
@@ -872,6 +911,7 @@ export type SessionUncheckedUpdateWithoutTeamInput = {
   deckId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   participants?: Prisma.ParticipantUncheckedUpdateManyWithoutSessionNestedInput
 }
 
@@ -884,6 +924,7 @@ export type SessionUncheckedUpdateManyWithoutTeamInput = {
   deckId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type SessionCreateManyDeckInput = {
@@ -895,6 +936,7 @@ export type SessionCreateManyDeckInput = {
   teamId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  expiresAt: Date | string
 }
 
 export type SessionUpdateWithoutDeckInput = {
@@ -904,6 +946,7 @@ export type SessionUpdateWithoutDeckInput = {
   status?: Prisma.EnumSessionStatusFieldUpdateOperationsInput | $Enums.SessionStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   owner?: Prisma.UserUpdateOneRequiredWithoutOwnedSessionsNestedInput
   team?: Prisma.TeamUpdateOneWithoutSessionsNestedInput
   participants?: Prisma.ParticipantUpdateManyWithoutSessionNestedInput
@@ -918,6 +961,7 @@ export type SessionUncheckedUpdateWithoutDeckInput = {
   teamId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   participants?: Prisma.ParticipantUncheckedUpdateManyWithoutSessionNestedInput
 }
 
@@ -930,6 +974,7 @@ export type SessionUncheckedUpdateManyWithoutDeckInput = {
   teamId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
@@ -973,6 +1018,7 @@ export type SessionSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   deckId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  expiresAt?: boolean
   owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   team?: boolean | Prisma.Session$teamArgs<ExtArgs>
   deck?: boolean | Prisma.DeckDefaultArgs<ExtArgs>
@@ -990,6 +1036,7 @@ export type SessionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   deckId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  expiresAt?: boolean
   owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   team?: boolean | Prisma.Session$teamArgs<ExtArgs>
   deck?: boolean | Prisma.DeckDefaultArgs<ExtArgs>
@@ -1005,6 +1052,7 @@ export type SessionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   deckId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  expiresAt?: boolean
   owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   team?: boolean | Prisma.Session$teamArgs<ExtArgs>
   deck?: boolean | Prisma.DeckDefaultArgs<ExtArgs>
@@ -1020,9 +1068,10 @@ export type SessionSelectScalar = {
   deckId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  expiresAt?: boolean
 }
 
-export type SessionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "inviteCode" | "status" | "ownerId" | "teamId" | "deckId" | "createdAt" | "updatedAt", ExtArgs["result"]["session"]>
+export type SessionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "inviteCode" | "status" | "ownerId" | "teamId" | "deckId" | "createdAt" | "updatedAt" | "expiresAt", ExtArgs["result"]["session"]>
 export type SessionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   team?: boolean | Prisma.Session$teamArgs<ExtArgs>
@@ -1059,6 +1108,7 @@ export type $SessionPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     deckId: string
     createdAt: Date
     updatedAt: Date
+    expiresAt: Date
   }, ExtArgs["result"]["session"]>
   composites: {}
 }
@@ -1495,6 +1545,7 @@ export interface SessionFieldRefs {
   readonly deckId: Prisma.FieldRef<"Session", 'String'>
   readonly createdAt: Prisma.FieldRef<"Session", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Session", 'DateTime'>
+  readonly expiresAt: Prisma.FieldRef<"Session", 'DateTime'>
 }
     
 

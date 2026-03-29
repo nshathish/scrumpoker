@@ -78,9 +78,12 @@ export async function signup(values: SignupFormType): Promise<ActionResult> {
 }
 
 export async function logout(): Promise<void> {
-  const supabase = await createClient();
+  const cookieStore = await cookies();
+  cookieStore.delete({ name: 'guest_user_id', path: '/' });
 
+  const supabase = await createClient();
   await supabase.auth.signOut();
+
   revalidatePath('/', 'layout');
   redirect('/');
 }

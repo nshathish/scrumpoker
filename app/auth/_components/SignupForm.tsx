@@ -187,7 +187,7 @@ export default function SignupForm() {
                 </Button>
 
                 <Link
-                  href={`/auth${returnTo ? `?returnTo=${returnTo}` : ''}`}
+                  href={`/auth/guest${returnTo ? `?returnTo=${returnTo}` : ''}`}
                   className="link-muted"
                   style={{ textAlign: 'center' }}
                 >

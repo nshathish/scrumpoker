@@ -12,7 +12,7 @@ interface AvatarProfileCardProps {
   className?: string;
 }
 
-export default function AvatarProfileCard({
+export default function ProfileCard({
   seed,
   name,
   estimate = '',

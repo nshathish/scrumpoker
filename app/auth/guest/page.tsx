@@ -2,7 +2,7 @@ import { Suspense } from 'react';
 
 import JoinGuestForm from '@/app/auth/_components/JoinGuestForm';
 
-export default function AuthPage() {
+export default function GuestPage() {
   return (
     <Suspense>
       <JoinGuestForm />

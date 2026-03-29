@@ -12,12 +12,14 @@ function pokerCardModifier(value: string) {
 }
 
 interface PokerPointsProps {
-  /** Controlled selected value (deck `value`, e.g. `"5"` or `"banana"`). */
   value: string;
   onValueChange?: (value: string) => void;
 }
 
-export function PokerPoints({ value, onValueChange }: PokerPointsProps) {
+export default function PokerPoints({
+  value,
+  onValueChange,
+}: PokerPointsProps) {
   return (
     <div
       className="pointer-events-none fixed inset-x-0 bottom-0 z-40 flex justify-center px-3 pb-6 pt-4"

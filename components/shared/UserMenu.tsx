@@ -90,7 +90,7 @@ export default function UserMenu({ email, isRegistered }: UserMenuProps) {
             <form action={logout} className="w-full">
               <button
                 type="submit"
-                className="w-full cursor-pointer rounded-lg bg-blue-600 px-4 py-2 text-center text-sm font-medium text-white transition-colors hover:bg-blue-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1"
+                className="w-full cursor-pointer border-0 bg-transparent p-0 text-left font-inherit text-inherit outline-none focus-visible:outline-none"
               >
                 Sign out
               </button>

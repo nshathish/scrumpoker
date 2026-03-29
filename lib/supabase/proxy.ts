@@ -52,7 +52,7 @@ export async function updateSession(request: NextRequest) {
   if (isProtectedRoute && !isAuthenticated) {
     const url = request.nextUrl.clone();
     const returnTo = request.nextUrl.pathname;
-    url.pathname = '/auth';
+    url.pathname = '/auth/guest';
     url.searchParams.set('returnTo', returnTo);
     return NextResponse.redirect(url);
   }

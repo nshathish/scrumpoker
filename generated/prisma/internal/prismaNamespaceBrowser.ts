@@ -114,6 +114,7 @@ export const SessionScalarFieldEnum = {
   name: 'name',
   inviteCode: 'inviteCode',
   status: 'status',
+  currentRound: 'currentRound',
   ownerId: 'ownerId',
   teamId: 'teamId',
   deckId: 'deckId',

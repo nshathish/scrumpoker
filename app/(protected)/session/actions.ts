@@ -10,6 +10,8 @@ import {
   findSessionByInviteCode,
   getDefaultDeck,
 } from '@/lib/repositories/session';
+import { actionError, ActionResult, actionSuccess } from '@/lib/types';
+import { castVote } from '@/lib/repositories/vote';
 
 export async function bootstrapNewSession({
   spectator,
@@ -66,4 +68,14 @@ export async function getOrJoinSession(inviteCode: string) {
   }
 
   return { session: updatedSession, currentUserId: user!.id };
+}
+
+export async function submitVote(input: {
+  sessionId: string;
+  participantId: string;
+  round: number;
+  value: string;
+}): Promise<ActionResult> {
+  await castVote(input);
+  return actionSuccess();
 }

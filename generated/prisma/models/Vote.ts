@@ -410,14 +410,6 @@ export type VoteUncheckedUpdateManyWithoutParticipantNestedInput = {
   deleteMany?: Prisma.VoteScalarWhereInput | Prisma.VoteScalarWhereInput[]
 }
 
-export type IntFieldUpdateOperationsInput = {
-  set?: number
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
-}
-
 export type VoteCreateWithoutParticipantInput = {
   id?: string
   sessionId: string

@@ -7,6 +7,8 @@ import ProfileCard from '@/app/(protected)/session/_components/ProfileCard';
 import PokerPoints from '@/app/(protected)/session/_components/PokerPoints';
 import { useCurrentAvatar } from '@/components/avatar/CurrentAvatarContext';
 
+import { submitVote } from '@/app/(protected)/session/actions';
+import { useServerAction } from '@/lib/hooks/use-server-action';
 import { useSessionRealtime } from '@/lib/hooks/use-session-realtime';
 
 import type { SessionGetPayload } from '@/generated/prisma/models/Session';
@@ -23,6 +25,7 @@ type SessionWithParticipants = SessionGetPayload<{
             avatarSeed: true;
           };
         };
+        votes: true;
       };
     };
   };
@@ -38,8 +41,22 @@ export default function SessionView({
   currentUserId,
 }: SessionViewProps) {
   const { seed } = useCurrentAvatar();
+  const { execute } = useServerAction(submitVote);
   const [estimate, setEstimate] = useState('');
+
   useSessionRealtime(session.id);
+
+  const handleVote = (value: string) => {
+    setEstimate(value);
+    if (currentUser) {
+      execute({
+        sessionId: session.id,
+        participantId: currentUser.id,
+        round: session.currentRound,
+        value,
+      }).catch(console.error);
+    }
+  };
 
   const currentUser = session.participants.find(
     (p) => p.userId === currentUserId,
@@ -57,24 +74,27 @@ export default function SessionView({
             justify="center"
             align="center"
           >
-            {session.participants.map((participant) => (
-              <ProfileCard
-                key={participant.id}
-                seed={
-                  participant.userId === currentUserId
-                    ? seed
-                    : participant.user.avatarSeed
-                }
-                name={
-                  participant.role === 'SPECTATOR'
-                    ? `${participant.user.displayName} (spectator)`
-                    : participant.user.displayName
-                }
-                estimate={
-                  participant.userId === currentUserId ? estimate : undefined
-                }
-              />
-            ))}
+            {session.participants.map((participant) => {
+              const hasVotedThisRound = participant.votes.some(
+                (v) => v.round === session.currentRound,
+              );
+              const isCurrentUser = participant.userId === currentUserId;
+
+              return (
+                <ProfileCard
+                  key={participant.id}
+                  seed={isCurrentUser ? seed : participant.user.avatarSeed}
+                  name={
+                    participant.role === 'SPECTATOR'
+                      ? `${participant.user.displayName} (spectator)`
+                      : participant.user.displayName
+                  }
+                  estimate={isCurrentUser ? estimate : undefined}
+                  hasVoted={hasVotedThisRound}
+                  isCurrentUser={isCurrentUser}
+                />
+              );
+            })}
           </Flex>
         </div>
       </div>
@@ -84,7 +104,7 @@ export default function SessionView({
         <PokerPoints
           cards={session.deck.cards}
           value={estimate}
-          onValueChange={setEstimate}
+          onValueChange={handleVote}
         />
       )}
     </>

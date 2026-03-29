@@ -20,8 +20,18 @@ export type SessionModel = runtime.Types.Result.DefaultSelection<Prisma.$Session
 
 export type AggregateSession = {
   _count: SessionCountAggregateOutputType | null
+  _avg: SessionAvgAggregateOutputType | null
+  _sum: SessionSumAggregateOutputType | null
   _min: SessionMinAggregateOutputType | null
   _max: SessionMaxAggregateOutputType | null
+}
+
+export type SessionAvgAggregateOutputType = {
+  currentRound: number | null
+}
+
+export type SessionSumAggregateOutputType = {
+  currentRound: number | null
 }
 
 export type SessionMinAggregateOutputType = {
@@ -29,6 +39,7 @@ export type SessionMinAggregateOutputType = {
   name: string | null
   inviteCode: string | null
   status: $Enums.SessionStatus | null
+  currentRound: number | null
   ownerId: string | null
   teamId: string | null
   deckId: string | null
@@ -42,6 +53,7 @@ export type SessionMaxAggregateOutputType = {
   name: string | null
   inviteCode: string | null
   status: $Enums.SessionStatus | null
+  currentRound: number | null
   ownerId: string | null
   teamId: string | null
   deckId: string | null
@@ -55,6 +67,7 @@ export type SessionCountAggregateOutputType = {
   name: number
   inviteCode: number
   status: number
+  currentRound: number
   ownerId: number
   teamId: number
   deckId: number
@@ -65,11 +78,20 @@ export type SessionCountAggregateOutputType = {
 }
 
 
+export type SessionAvgAggregateInputType = {
+  currentRound?: true
+}
+
+export type SessionSumAggregateInputType = {
+  currentRound?: true
+}
+
 export type SessionMinAggregateInputType = {
   id?: true
   name?: true
   inviteCode?: true
   status?: true
+  currentRound?: true
   ownerId?: true
   teamId?: true
   deckId?: true
@@ -83,6 +105,7 @@ export type SessionMaxAggregateInputType = {
   name?: true
   inviteCode?: true
   status?: true
+  currentRound?: true
   ownerId?: true
   teamId?: true
   deckId?: true
@@ -96,6 +119,7 @@ export type SessionCountAggregateInputType = {
   name?: true
   inviteCode?: true
   status?: true
+  currentRound?: true
   ownerId?: true
   teamId?: true
   deckId?: true
@@ -143,6 +167,18 @@ export type SessionAggregateArgs<ExtArgs extends runtime.Types.Extensions.Intern
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: SessionAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: SessionSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: SessionMinAggregateInputType
@@ -173,6 +209,8 @@ export type SessionGroupByArgs<ExtArgs extends runtime.Types.Extensions.Internal
   take?: number
   skip?: number
   _count?: SessionCountAggregateInputType | true
+  _avg?: SessionAvgAggregateInputType
+  _sum?: SessionSumAggregateInputType
   _min?: SessionMinAggregateInputType
   _max?: SessionMaxAggregateInputType
 }
@@ -182,6 +220,7 @@ export type SessionGroupByOutputType = {
   name: string
   inviteCode: string
   status: $Enums.SessionStatus
+  currentRound: number
   ownerId: string
   teamId: string | null
   deckId: string
@@ -189,6 +228,8 @@ export type SessionGroupByOutputType = {
   updatedAt: Date
   expiresAt: Date
   _count: SessionCountAggregateOutputType | null
+  _avg: SessionAvgAggregateOutputType | null
+  _sum: SessionSumAggregateOutputType | null
   _min: SessionMinAggregateOutputType | null
   _max: SessionMaxAggregateOutputType | null
 }
@@ -216,6 +257,7 @@ export type SessionWhereInput = {
   name?: Prisma.StringFilter<"Session"> | string
   inviteCode?: Prisma.StringFilter<"Session"> | string
   status?: Prisma.EnumSessionStatusFilter<"Session"> | $Enums.SessionStatus
+  currentRound?: Prisma.IntFilter<"Session"> | number
   ownerId?: Prisma.UuidFilter<"Session"> | string
   teamId?: Prisma.UuidNullableFilter<"Session"> | string | null
   deckId?: Prisma.UuidFilter<"Session"> | string
@@ -233,6 +275,7 @@ export type SessionOrderByWithRelationInput = {
   name?: Prisma.SortOrder
   inviteCode?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  currentRound?: Prisma.SortOrder
   ownerId?: Prisma.SortOrder
   teamId?: Prisma.SortOrderInput | Prisma.SortOrder
   deckId?: Prisma.SortOrder
@@ -253,6 +296,7 @@ export type SessionWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.SessionWhereInput | Prisma.SessionWhereInput[]
   name?: Prisma.StringFilter<"Session"> | string
   status?: Prisma.EnumSessionStatusFilter<"Session"> | $Enums.SessionStatus
+  currentRound?: Prisma.IntFilter<"Session"> | number
   ownerId?: Prisma.UuidFilter<"Session"> | string
   teamId?: Prisma.UuidNullableFilter<"Session"> | string | null
   deckId?: Prisma.UuidFilter<"Session"> | string
@@ -270,6 +314,7 @@ export type SessionOrderByWithAggregationInput = {
   name?: Prisma.SortOrder
   inviteCode?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  currentRound?: Prisma.SortOrder
   ownerId?: Prisma.SortOrder
   teamId?: Prisma.SortOrderInput | Prisma.SortOrder
   deckId?: Prisma.SortOrder
@@ -277,8 +322,10 @@ export type SessionOrderByWithAggregationInput = {
   updatedAt?: Prisma.SortOrder
   expiresAt?: Prisma.SortOrder
   _count?: Prisma.SessionCountOrderByAggregateInput
+  _avg?: Prisma.SessionAvgOrderByAggregateInput
   _max?: Prisma.SessionMaxOrderByAggregateInput
   _min?: Prisma.SessionMinOrderByAggregateInput
+  _sum?: Prisma.SessionSumOrderByAggregateInput
 }
 
 export type SessionScalarWhereWithAggregatesInput = {
@@ -289,6 +336,7 @@ export type SessionScalarWhereWithAggregatesInput = {
   name?: Prisma.StringWithAggregatesFilter<"Session"> | string
   inviteCode?: Prisma.StringWithAggregatesFilter<"Session"> | string
   status?: Prisma.EnumSessionStatusWithAggregatesFilter<"Session"> | $Enums.SessionStatus
+  currentRound?: Prisma.IntWithAggregatesFilter<"Session"> | number
   ownerId?: Prisma.UuidWithAggregatesFilter<"Session"> | string
   teamId?: Prisma.UuidNullableWithAggregatesFilter<"Session"> | string | null
   deckId?: Prisma.UuidWithAggregatesFilter<"Session"> | string
@@ -302,6 +350,7 @@ export type SessionCreateInput = {
   name: string
   inviteCode?: string
   status?: $Enums.SessionStatus
+  currentRound?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   expiresAt: Date | string
@@ -316,6 +365,7 @@ export type SessionUncheckedCreateInput = {
   name: string
   inviteCode?: string
   status?: $Enums.SessionStatus
+  currentRound?: number
   ownerId: string
   teamId?: string | null
   deckId: string
@@ -330,6 +380,7 @@ export type SessionUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   inviteCode?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumSessionStatusFieldUpdateOperationsInput | $Enums.SessionStatus
+  currentRound?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -344,6 +395,7 @@ export type SessionUncheckedUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   inviteCode?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumSessionStatusFieldUpdateOperationsInput | $Enums.SessionStatus
+  currentRound?: Prisma.IntFieldUpdateOperationsInput | number
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   teamId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deckId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -358,6 +410,7 @@ export type SessionCreateManyInput = {
   name: string
   inviteCode?: string
   status?: $Enums.SessionStatus
+  currentRound?: number
   ownerId: string
   teamId?: string | null
   deckId: string
@@ -371,6 +424,7 @@ export type SessionUpdateManyMutationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   inviteCode?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumSessionStatusFieldUpdateOperationsInput | $Enums.SessionStatus
+  currentRound?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -381,6 +435,7 @@ export type SessionUncheckedUpdateManyInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   inviteCode?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumSessionStatusFieldUpdateOperationsInput | $Enums.SessionStatus
+  currentRound?: Prisma.IntFieldUpdateOperationsInput | number
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   teamId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deckId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -404,6 +459,7 @@ export type SessionCountOrderByAggregateInput = {
   name?: Prisma.SortOrder
   inviteCode?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  currentRound?: Prisma.SortOrder
   ownerId?: Prisma.SortOrder
   teamId?: Prisma.SortOrder
   deckId?: Prisma.SortOrder
@@ -412,11 +468,16 @@ export type SessionCountOrderByAggregateInput = {
   expiresAt?: Prisma.SortOrder
 }
 
+export type SessionAvgOrderByAggregateInput = {
+  currentRound?: Prisma.SortOrder
+}
+
 export type SessionMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   inviteCode?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  currentRound?: Prisma.SortOrder
   ownerId?: Prisma.SortOrder
   teamId?: Prisma.SortOrder
   deckId?: Prisma.SortOrder
@@ -430,12 +491,17 @@ export type SessionMinOrderByAggregateInput = {
   name?: Prisma.SortOrder
   inviteCode?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  currentRound?: Prisma.SortOrder
   ownerId?: Prisma.SortOrder
   teamId?: Prisma.SortOrder
   deckId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   expiresAt?: Prisma.SortOrder
+}
+
+export type SessionSumOrderByAggregateInput = {
+  currentRound?: Prisma.SortOrder
 }
 
 export type SessionScalarRelationFilter = {
@@ -531,6 +597,14 @@ export type EnumSessionStatusFieldUpdateOperationsInput = {
   set?: $Enums.SessionStatus
 }
 
+export type IntFieldUpdateOperationsInput = {
+  set?: number
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
 export type SessionCreateNestedOneWithoutParticipantsInput = {
   create?: Prisma.XOR<Prisma.SessionCreateWithoutParticipantsInput, Prisma.SessionUncheckedCreateWithoutParticipantsInput>
   connectOrCreate?: Prisma.SessionCreateOrConnectWithoutParticipantsInput
@@ -592,6 +666,7 @@ export type SessionCreateWithoutOwnerInput = {
   name: string
   inviteCode?: string
   status?: $Enums.SessionStatus
+  currentRound?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   expiresAt: Date | string
@@ -605,6 +680,7 @@ export type SessionUncheckedCreateWithoutOwnerInput = {
   name: string
   inviteCode?: string
   status?: $Enums.SessionStatus
+  currentRound?: number
   teamId?: string | null
   deckId: string
   createdAt?: Date | string
@@ -647,6 +723,7 @@ export type SessionScalarWhereInput = {
   name?: Prisma.StringFilter<"Session"> | string
   inviteCode?: Prisma.StringFilter<"Session"> | string
   status?: Prisma.EnumSessionStatusFilter<"Session"> | $Enums.SessionStatus
+  currentRound?: Prisma.IntFilter<"Session"> | number
   ownerId?: Prisma.UuidFilter<"Session"> | string
   teamId?: Prisma.UuidNullableFilter<"Session"> | string | null
   deckId?: Prisma.UuidFilter<"Session"> | string
@@ -660,6 +737,7 @@ export type SessionCreateWithoutTeamInput = {
   name: string
   inviteCode?: string
   status?: $Enums.SessionStatus
+  currentRound?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   expiresAt: Date | string
@@ -673,6 +751,7 @@ export type SessionUncheckedCreateWithoutTeamInput = {
   name: string
   inviteCode?: string
   status?: $Enums.SessionStatus
+  currentRound?: number
   ownerId: string
   deckId: string
   createdAt?: Date | string
@@ -712,6 +791,7 @@ export type SessionCreateWithoutParticipantsInput = {
   name: string
   inviteCode?: string
   status?: $Enums.SessionStatus
+  currentRound?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   expiresAt: Date | string
@@ -725,6 +805,7 @@ export type SessionUncheckedCreateWithoutParticipantsInput = {
   name: string
   inviteCode?: string
   status?: $Enums.SessionStatus
+  currentRound?: number
   ownerId: string
   teamId?: string | null
   deckId: string
@@ -754,6 +835,7 @@ export type SessionUpdateWithoutParticipantsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   inviteCode?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumSessionStatusFieldUpdateOperationsInput | $Enums.SessionStatus
+  currentRound?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -767,6 +849,7 @@ export type SessionUncheckedUpdateWithoutParticipantsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   inviteCode?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumSessionStatusFieldUpdateOperationsInput | $Enums.SessionStatus
+  currentRound?: Prisma.IntFieldUpdateOperationsInput | number
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   teamId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deckId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -780,6 +863,7 @@ export type SessionCreateWithoutDeckInput = {
   name: string
   inviteCode?: string
   status?: $Enums.SessionStatus
+  currentRound?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   expiresAt: Date | string
@@ -793,6 +877,7 @@ export type SessionUncheckedCreateWithoutDeckInput = {
   name: string
   inviteCode?: string
   status?: $Enums.SessionStatus
+  currentRound?: number
   ownerId: string
   teamId?: string | null
   createdAt?: Date | string
@@ -832,6 +917,7 @@ export type SessionCreateManyOwnerInput = {
   name: string
   inviteCode?: string
   status?: $Enums.SessionStatus
+  currentRound?: number
   teamId?: string | null
   deckId: string
   createdAt?: Date | string
@@ -844,6 +930,7 @@ export type SessionUpdateWithoutOwnerInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   inviteCode?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumSessionStatusFieldUpdateOperationsInput | $Enums.SessionStatus
+  currentRound?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -857,6 +944,7 @@ export type SessionUncheckedUpdateWithoutOwnerInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   inviteCode?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumSessionStatusFieldUpdateOperationsInput | $Enums.SessionStatus
+  currentRound?: Prisma.IntFieldUpdateOperationsInput | number
   teamId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deckId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -870,6 +958,7 @@ export type SessionUncheckedUpdateManyWithoutOwnerInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   inviteCode?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumSessionStatusFieldUpdateOperationsInput | $Enums.SessionStatus
+  currentRound?: Prisma.IntFieldUpdateOperationsInput | number
   teamId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deckId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -882,6 +971,7 @@ export type SessionCreateManyTeamInput = {
   name: string
   inviteCode?: string
   status?: $Enums.SessionStatus
+  currentRound?: number
   ownerId: string
   deckId: string
   createdAt?: Date | string
@@ -894,6 +984,7 @@ export type SessionUpdateWithoutTeamInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   inviteCode?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumSessionStatusFieldUpdateOperationsInput | $Enums.SessionStatus
+  currentRound?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -907,6 +998,7 @@ export type SessionUncheckedUpdateWithoutTeamInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   inviteCode?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumSessionStatusFieldUpdateOperationsInput | $Enums.SessionStatus
+  currentRound?: Prisma.IntFieldUpdateOperationsInput | number
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   deckId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -920,6 +1012,7 @@ export type SessionUncheckedUpdateManyWithoutTeamInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   inviteCode?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumSessionStatusFieldUpdateOperationsInput | $Enums.SessionStatus
+  currentRound?: Prisma.IntFieldUpdateOperationsInput | number
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   deckId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -932,6 +1025,7 @@ export type SessionCreateManyDeckInput = {
   name: string
   inviteCode?: string
   status?: $Enums.SessionStatus
+  currentRound?: number
   ownerId: string
   teamId?: string | null
   createdAt?: Date | string
@@ -944,6 +1038,7 @@ export type SessionUpdateWithoutDeckInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   inviteCode?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumSessionStatusFieldUpdateOperationsInput | $Enums.SessionStatus
+  currentRound?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -957,6 +1052,7 @@ export type SessionUncheckedUpdateWithoutDeckInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   inviteCode?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumSessionStatusFieldUpdateOperationsInput | $Enums.SessionStatus
+  currentRound?: Prisma.IntFieldUpdateOperationsInput | number
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   teamId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -970,6 +1066,7 @@ export type SessionUncheckedUpdateManyWithoutDeckInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   inviteCode?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumSessionStatusFieldUpdateOperationsInput | $Enums.SessionStatus
+  currentRound?: Prisma.IntFieldUpdateOperationsInput | number
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   teamId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1013,6 +1110,7 @@ export type SessionSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   name?: boolean
   inviteCode?: boolean
   status?: boolean
+  currentRound?: boolean
   ownerId?: boolean
   teamId?: boolean
   deckId?: boolean
@@ -1031,6 +1129,7 @@ export type SessionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   name?: boolean
   inviteCode?: boolean
   status?: boolean
+  currentRound?: boolean
   ownerId?: boolean
   teamId?: boolean
   deckId?: boolean
@@ -1047,6 +1146,7 @@ export type SessionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   name?: boolean
   inviteCode?: boolean
   status?: boolean
+  currentRound?: boolean
   ownerId?: boolean
   teamId?: boolean
   deckId?: boolean
@@ -1063,6 +1163,7 @@ export type SessionSelectScalar = {
   name?: boolean
   inviteCode?: boolean
   status?: boolean
+  currentRound?: boolean
   ownerId?: boolean
   teamId?: boolean
   deckId?: boolean
@@ -1071,7 +1172,7 @@ export type SessionSelectScalar = {
   expiresAt?: boolean
 }
 
-export type SessionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "inviteCode" | "status" | "ownerId" | "teamId" | "deckId" | "createdAt" | "updatedAt" | "expiresAt", ExtArgs["result"]["session"]>
+export type SessionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "inviteCode" | "status" | "currentRound" | "ownerId" | "teamId" | "deckId" | "createdAt" | "updatedAt" | "expiresAt", ExtArgs["result"]["session"]>
 export type SessionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   team?: boolean | Prisma.Session$teamArgs<ExtArgs>
@@ -1103,6 +1204,7 @@ export type $SessionPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     name: string
     inviteCode: string
     status: $Enums.SessionStatus
+    currentRound: number
     ownerId: string
     teamId: string | null
     deckId: string
@@ -1540,6 +1642,7 @@ export interface SessionFieldRefs {
   readonly name: Prisma.FieldRef<"Session", 'String'>
   readonly inviteCode: Prisma.FieldRef<"Session", 'String'>
   readonly status: Prisma.FieldRef<"Session", 'SessionStatus'>
+  readonly currentRound: Prisma.FieldRef<"Session", 'Int'>
   readonly ownerId: Prisma.FieldRef<"Session", 'String'>
   readonly teamId: Prisma.FieldRef<"Session", 'String'>
   readonly deckId: Prisma.FieldRef<"Session", 'String'>

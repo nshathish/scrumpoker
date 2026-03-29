@@ -56,16 +56,17 @@ enum TeamRole {
 }
 
 model Session {
-  id         String        @id @default(uuid()) @db.Uuid
-  name       String
-  inviteCode String        @unique @default(cuid()) @map("invite_code")
-  status     SessionStatus @default(VOTING)
-  ownerId    String        @map("owner_id") @db.Uuid
-  teamId     String?       @map("team_id") @db.Uuid
-  deckId     String        @map("deck_id") @db.Uuid
-  createdAt  DateTime      @default(now()) @map("created_at")
-  updatedAt  DateTime      @updatedAt @map("updated_at")
-  expiresAt  DateTime      @map("expires_at")
+  id           String        @id @default(uuid()) @db.Uuid
+  name         String
+  inviteCode   String        @unique @default(cuid()) @map("invite_code")
+  status       SessionStatus @default(VOTING)
+  currentRound Int           @default(1) @map("current_round")
+  ownerId      String        @map("owner_id") @db.Uuid
+  teamId       String?       @map("team_id") @db.Uuid
+  deckId       String        @map("deck_id") @db.Uuid
+  createdAt    DateTime      @default(now()) @map("created_at")
+  updatedAt    DateTime      @updatedAt @map("updated_at")
+  expiresAt    DateTime      @map("expires_at")
 
   owner        User          @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   team         Team?         @relation(fields: [teamId], references: [id], onDelete: SetNull)

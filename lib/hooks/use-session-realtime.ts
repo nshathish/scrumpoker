@@ -29,6 +29,16 @@ export function useSessionRealtime(sessionId: string) {
         },
         () => routerRef.current.refresh(),
       )
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'votes',
+          filter: `session_id=eq.${sessionId}`,
+        },
+        () => routerRef.current.refresh(),
+      )
       .subscribe();
 
     return () => {

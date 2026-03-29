@@ -1,13 +1,14 @@
 'use client';
 
 import Image from 'next/image';
+import { Check } from 'lucide-react';
 
-import { pokerLabelForValue } from '@/app/(home)/_constants/pokerDeck';
-
-interface AvatarProfileCardProps {
+interface ProfileCardProps {
   seed: string;
   name: string;
   estimate?: string;
+  hasVoted?: boolean;
+  isCurrentUser?: boolean;
   avatarSize?: number;
   className?: string;
 }
@@ -16,18 +17,20 @@ export default function ProfileCard({
   seed,
   name,
   estimate = '',
+  hasVoted = false,
+  isCurrentUser = false,
   avatarSize = 72,
   className = '',
-}: AvatarProfileCardProps) {
-  const picked = estimate.length > 0;
-  const displayEstimate = picked ? pokerLabelForValue(estimate) : '';
+}: ProfileCardProps) {
+  const picked = isCurrentUser && estimate.length > 0;
+  const showVotedMask = !isCurrentUser && hasVoted;
 
   return (
     <div
       className={[
         'box-border flex w-28 flex-col items-center rounded-lg px-3 pb-4 pt-3 sm:w-32',
         'aspect-[3/4] shadow-sm',
-        picked
+        picked || showVotedMask
           ? 'border-2 border-blue-400 bg-[#d8f4dc]'
           : 'border-4 border-blue-400 bg-gray-100',
         className,
@@ -42,8 +45,14 @@ export default function ProfileCard({
                 : 'text-5xl font-semibold tabular-nums leading-none text-slate-700 sm:text-6xl'
             }
           >
-            {displayEstimate}
+            {estimate}
           </span>
+        </div>
+      ) : showVotedMask ? (
+        <div className="flex min-h-0 w-full flex-1 flex-col items-center justify-center pb-1">
+          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100">
+            <Check className="h-8 w-8 text-emerald-500" strokeWidth={3} />
+          </div>
         </div>
       ) : (
         <div

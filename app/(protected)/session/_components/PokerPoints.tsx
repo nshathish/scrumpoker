@@ -2,8 +2,6 @@
 
 import { ToggleGroup } from 'radix-ui';
 
-import { POKER_DECK } from '@/app/(home)/_constants/pokerDeck';
-
 function pokerCardModifier(value: string) {
   if (value === 'banana') return 'poker-card--banana';
   if (['13', '21', '34', '55', '89'].includes(value))

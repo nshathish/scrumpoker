@@ -1005,6 +1005,7 @@ export const SessionScalarFieldEnum = {
   name: 'name',
   inviteCode: 'inviteCode',
   status: 'status',
+  currentRound: 'currentRound',
   ownerId: 'ownerId',
   teamId: 'teamId',
   deckId: 'deckId',
@@ -1134,20 +1135,6 @@ export type ListEnumSessionStatusFieldRefInput<$PrismaModel> = FieldRefInputType
 
 
 /**
- * Reference to a field of type 'ParticipantRole'
- */
-export type EnumParticipantRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ParticipantRole'>
-    
-
-
-/**
- * Reference to a field of type 'ParticipantRole[]'
- */
-export type ListEnumParticipantRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ParticipantRole[]'>
-    
-
-
-/**
  * Reference to a field of type 'Int'
  */
 export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
@@ -1158,6 +1145,20 @@ export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'In
  * Reference to a field of type 'Int[]'
  */
 export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+/**
+ * Reference to a field of type 'ParticipantRole'
+ */
+export type EnumParticipantRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ParticipantRole'>
+    
+
+
+/**
+ * Reference to a field of type 'ParticipantRole[]'
+ */
+export type ListEnumParticipantRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ParticipantRole[]'>
     
 
 

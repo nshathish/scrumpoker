@@ -62,7 +62,6 @@ export async function addParticipant({
       },
     });
   } catch (error) {
-    console.log('addParticipant', error);
     // If race condition causes duplicate, just fetch the existing one
     if (
       error instanceof PrismaClientKnownRequestError &&
@@ -98,6 +97,7 @@ export async function findSessionByInviteCode(inviteCode: string) {
               avatarSeed: true,
             },
           },
+          votes: true,
         },
       },
     },
@@ -107,5 +107,15 @@ export async function findSessionByInviteCode(inviteCode: string) {
 export async function deleteParticipantsByUserId(userId: string) {
   return prisma.participant.deleteMany({
     where: { userId },
+  });
+}
+
+export async function advanceRound(sessionId: string) {
+  return prisma.session.update({
+    where: { id: sessionId },
+    data: {
+      currentRound: { increment: 1 },
+      status: 'VOTING',
+    },
   });
 }

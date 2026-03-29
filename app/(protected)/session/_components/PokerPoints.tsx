@@ -12,11 +12,13 @@ function pokerCardModifier(value: string) {
 }
 
 interface PokerPointsProps {
+  cards: string[];
   value: string;
   onValueChange?: (value: string) => void;
 }
 
 export default function PokerPoints({
+  cards,
   value,
   onValueChange,
 }: PokerPointsProps) {
@@ -34,13 +36,13 @@ export default function PokerPoints({
         value={value}
         onValueChange={(v) => onValueChange?.(v)}
       >
-        {POKER_DECK.map((card) => (
+        {cards.map((card) => (
           <ToggleGroup.Item
-            key={card.value}
-            value={card.value}
-            className={`poker-card ${pokerCardModifier(card.value)}`}
+            key={card}
+            value={card}
+            className={`poker-card ${pokerCardModifier(card)}`}
           >
-            {card.label}
+            {card}
           </ToggleGroup.Item>
         ))}
       </ToggleGroup.Root>

@@ -82,7 +82,7 @@ export default function SessionView({
       {/* Card selection - only for voters */}
       {!isSpectator && (
         <PokerPoints
-          // cards={session.deck.cards}
+          cards={session.deck.cards}
           value={estimate}
           onValueChange={setEstimate}
         />

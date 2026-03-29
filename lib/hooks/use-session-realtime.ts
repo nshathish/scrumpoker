@@ -8,6 +8,11 @@ import { createClient } from '@/lib/supabase/client';
 export function useSessionRealtime(sessionId: string) {
   const router = useRouter();
   const supabaseRef = useRef(createClient());
+  const routerRef = useRef(router);
+
+  useEffect(() => {
+    routerRef.current = router;
+  });
 
   useEffect(() => {
     const supabase = supabaseRef.current;
@@ -22,22 +27,12 @@ export function useSessionRealtime(sessionId: string) {
           table: 'participants',
           filter: `session_id=eq.${sessionId}`,
         },
-        () => router.refresh(),
-      )
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'sessions',
-          filter: `id=eq.${sessionId}`,
-        },
-        () => router.refresh(),
+        () => routerRef.current.refresh(),
       )
       .subscribe();
 
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [sessionId, router]);
+  }, [sessionId]);
 }

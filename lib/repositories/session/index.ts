@@ -1,3 +1,5 @@
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/client';
+
 import prisma from '@/lib/prisma';
 import { generateRandomSessionName } from '@/lib/utils/random-words';
 
@@ -47,17 +49,33 @@ export async function addParticipant({
   userId: string;
   role?: ParticipantRole;
 }) {
-  return prisma.participant.upsert({
-    where: {
-      sessionId_userId: { sessionId, userId },
-    },
-    update: {}, // already exists, do nothing
-    create: {
-      sessionId,
-      userId,
-      role,
-    },
-  });
+  try {
+    return await prisma.participant.upsert({
+      where: {
+        sessionId_userId: { sessionId, userId },
+      },
+      update: {},
+      create: {
+        sessionId,
+        userId,
+        role,
+      },
+    });
+  } catch (error) {
+    console.log('addParticipant', error);
+    // If race condition causes duplicate, just fetch the existing one
+    if (
+      error instanceof PrismaClientKnownRequestError &&
+      error.code === 'P2002'
+    ) {
+      return prisma.participant.findUniqueOrThrow({
+        where: {
+          sessionId_userId: { sessionId, userId },
+        },
+      });
+    }
+    throw error;
+  }
 }
 
 export async function getDefaultDeck() {

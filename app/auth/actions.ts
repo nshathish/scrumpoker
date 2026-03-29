@@ -16,12 +16,7 @@ import {
 } from '@/lib/schemas';
 
 import { createGuestUser } from '@/lib/repositories/user';
-import {
-  addParticipant,
-  createSession,
-  getDefaultDeck,
-} from '@/lib/repositories/session';
-import { actionError, type ActionResult } from '@/lib/types';
+import { actionError, actionSuccess, type ActionResult } from '@/lib/types';
 
 export async function login(values: LoginFormType): Promise<ActionResult> {
   const validated = LoginSchema.safeParse(values);
@@ -43,7 +38,7 @@ export async function login(values: LoginFormType): Promise<ActionResult> {
   }
 
   revalidatePath('/', 'layout');
-  redirect('/dashboard');
+  return actionSuccess();
 }
 
 export async function signup(values: SignupFormType): Promise<ActionResult> {
@@ -92,32 +87,16 @@ export async function logout(): Promise<void> {
 
 export async function joinAsGuest(
   values: GuestFormType,
-): Promise<ActionResult> {
+): Promise<ActionResult<{ userId: string }>> {
   const validated = GuestSchema.safeParse(values);
 
   if (!validated.success) {
     return actionError('Invalid fields.');
   }
 
-  const { displayName, isSpectator } = validated.data;
-
-  const deck = await getDefaultDeck();
-  if (!deck) {
-    return actionError('No default deck found.');
-  }
+  const { displayName } = validated.data;
 
   const user = await createGuestUser(displayName);
-
-  const session = await createSession({
-    ownerId: user.id,
-    deckId: deck.id,
-  });
-
-  await addParticipant({
-    sessionId: session.id,
-    userId: user.id,
-    role: isSpectator ? 'SPECTATOR' : 'VOTER',
-  });
 
   const cookieStore = await cookies();
   cookieStore.set('guest_user_id', user.id, {
@@ -128,6 +107,5 @@ export async function joinAsGuest(
     path: '/',
   });
 
-  revalidatePath('/', 'layout');
-  redirect(`/session/${session.inviteCode}`);
+  return actionSuccess({ userId: user.id });
 }

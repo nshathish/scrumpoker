@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -16,13 +17,21 @@ import {
 } from '@radix-ui/themes';
 import ErrorAlert from '@/components/shared/ErrorAlert';
 
-import { useServerAction } from '@/lib/hooks/use-server-action';
 import { login } from '@/app/auth/actions';
+import { useServerAction } from '@/lib/hooks/use-server-action';
+import { useAuthRedirect } from '@/lib/hooks/use-auth-redirect';
 
 import { type LoginFormType, LoginSchema } from '@/lib/schemas';
 
 export default function LoginPage() {
   const { state, execute, isPending, reset } = useServerAction(login);
+  const { returnTo, redirect } = useAuthRedirect();
+
+  useEffect(() => {
+    if (state.status === 'success') {
+      redirect();
+    }
+  }, [state.status, redirect]);
 
   const {
     register,
@@ -109,11 +118,15 @@ export default function LoginPage() {
                 </Text>
 
                 <Button variant="outline" asChild>
-                  <Link href="/auth/signup">Create account</Link>
+                  <Link
+                    href={`/auth/signup${returnTo ? `?returnTo=${returnTo}` : ''}`}
+                  >
+                    Create account
+                  </Link>
                 </Button>
 
                 <Link
-                  href="/auth"
+                  href={`/auth${returnTo ? `?returnTo=${returnTo}` : ''}`}
                   className="link-muted"
                   style={{ textAlign: 'center' }}
                 >

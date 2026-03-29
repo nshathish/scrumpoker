@@ -4,18 +4,15 @@ import Image from 'next/image';
 
 import { pokerLabelForValue } from '@/app/(home)/_constants/pokerDeck';
 
-export interface AvatarProfileCardProps {
+interface AvatarProfileCardProps {
   seed: string;
-  /** Shown at the bottom in monospace */
   name: string;
-  /** Planning poker tile value when picked (`"5"`, `"banana"`, etc.); empty = avatar mode */
   estimate?: string;
-  /** Avatar image diameter inside the circle (avatar mode only) */
   avatarSize?: number;
   className?: string;
 }
 
-export function AvatarProfileCard({
+export default function AvatarProfileCard({
   seed,
   name,
   estimate = '',
@@ -68,7 +65,9 @@ export function AvatarProfileCard({
       )}
       <p
         className="mt-auto w-full shrink-0 truncate text-center text-sm font-normal leading-tight text-slate-700 sm:text-base"
-        style={{ fontFamily: 'var(--font-geist-mono), ui-monospace, monospace' }}
+        style={{
+          fontFamily: 'var(--font-geist-mono), ui-monospace, monospace',
+        }}
         title={name}
       >
         {name}

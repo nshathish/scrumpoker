@@ -4,8 +4,10 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { Avatar, DropdownMenu, Text } from '@radix-ui/themes';
 
+import AvatarModal from '@/components/avatar/AvatarModal';
 import { useCurrentAvatar } from '@/components/avatar/CurrentAvatarContext';
-import { AvatarModal } from '@/app/(protected)/session/_components/AvatarModal';
+
+import { logout } from '@/app/auth/actions';
 
 interface UserMenuProps {
   email?: string;
@@ -84,11 +86,19 @@ export default function UserMenu({ email, isRegistered }: UserMenuProps) {
 
           <DropdownMenu.Separator />
 
-          <DropdownMenu.Item color="red" asChild>
-            <Link href="/auth/logout">Sign out</Link>
+          <DropdownMenu.Item asChild>
+            <form action={logout} className="w-full">
+              <button
+                type="submit"
+                className="w-full cursor-pointer rounded-lg bg-blue-600 px-4 py-2 text-center text-sm font-medium text-white transition-colors hover:bg-blue-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1"
+              >
+                Sign out
+              </button>
+            </form>
           </DropdownMenu.Item>
         </DropdownMenu.Content>
       </DropdownMenu.Root>
+
       <AvatarModal
         seeds={seeds}
         open={avatarModalOpen}

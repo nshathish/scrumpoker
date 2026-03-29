@@ -2,7 +2,7 @@
 
 import { Dialog, Button, Flex } from '@radix-ui/themes';
 
-import { AvatarGrid } from '@/app/(protected)/session/_components/AvatarGrid';
+import AvatarGrid from '@/components/avatar/AvatarGrid';
 import { useCurrentAvatar } from '@/components/avatar/CurrentAvatarContext';
 
 interface AvatarModalProps {
@@ -12,7 +12,7 @@ interface AvatarModalProps {
   onAvatarChange?: (seed: string) => void;
 }
 
-export function AvatarModal({
+export default function AvatarModal({
   seeds,
   onAvatarChange,
   open,

@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useForm, useController } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+
 import {
   Box,
   Button,
@@ -14,16 +15,17 @@ import {
   Text,
   TextField,
 } from '@radix-ui/themes';
-
 import ErrorAlert from '@/components/shared/ErrorAlert';
 
-import { useServerAction } from '@/lib/hooks/use-server-action';
 import { signup } from '@/app/auth/actions';
+import { useServerAction } from '@/lib/hooks/use-server-action';
+import { useAuthRedirect } from '@/lib/hooks/use-auth-redirect';
 
 import { type SignupFormType, SignupSchema } from '@/lib/schemas';
 
 export default function SignupPage() {
   const { state, execute, isPending, reset } = useServerAction(signup);
+  const { returnTo } = useAuthRedirect();
 
   const {
     register,
@@ -177,11 +179,15 @@ export default function SignupPage() {
                 </Text>
 
                 <Button variant="outline" asChild>
-                  <Link href="/auth/login">Sign in</Link>
+                  <Link
+                    href={`/auth/login${returnTo ? `?returnTo=${returnTo}` : ''}`}
+                  >
+                    Sign in
+                  </Link>
                 </Button>
 
                 <Link
-                  href="/auth"
+                  href={`/auth${returnTo ? `?returnTo=${returnTo}` : ''}`}
                   className="link-muted"
                   style={{ textAlign: 'center' }}
                 >

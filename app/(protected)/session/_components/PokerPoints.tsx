@@ -29,8 +29,8 @@ export function PokerPoints({ value, onValueChange }: PokerPointsProps) {
         rovingFocus
         className="pointer-events-auto flex max-w-full flex-nowrap items-end justify-center gap-2 sm:gap-3"
         aria-label="Planning poker estimate"
-        value={value || undefined}
-        onValueChange={(v) => onValueChange?.(v ?? '')}
+        value={value}
+        onValueChange={(v) => onValueChange?.(v)}
       >
         {POKER_DECK.map((card) => (
           <ToggleGroup.Item

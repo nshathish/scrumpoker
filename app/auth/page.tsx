@@ -1,8 +1,11 @@
 'use client';
 
+import { useEffect } from 'react';
+import Link from 'next/link';
 import { useController, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Info } from 'lucide-react';
+
 import {
   Box,
   Button,
@@ -14,17 +17,17 @@ import {
   TextField,
   Tooltip,
 } from '@radix-ui/themes';
-
 import ErrorAlert from '@/components/shared/ErrorAlert';
 
 import { joinAsGuest } from '@/app/auth/actions';
 import { useServerAction } from '@/lib/hooks/use-server-action';
+import { useAuthRedirect } from '@/lib/hooks/use-auth-redirect';
 
 import { type GuestFormType, GuestSchema } from '@/lib/schemas';
-import Link from 'next/link';
 
 export default function AuthPage() {
   const { state, execute, isPending, reset } = useServerAction(joinAsGuest);
+  const { returnTo, redirect } = useAuthRedirect();
 
   const {
     register,
@@ -43,6 +46,12 @@ export default function AuthPage() {
     name: 'isSpectator',
     control,
   });
+
+  useEffect(() => {
+    if (state.status === 'success') {
+      redirect({ spectator: String(spectatorField.value) });
+    }
+  }, [state.status, redirect, spectatorField.value]);
 
   return (
     <Flex
@@ -100,10 +109,16 @@ export default function AuthPage() {
               </form>
 
               <Flex justify="between">
-                <Link href="/auth/signup" className="link-accent">
+                <Link
+                  href={`/auth/signup${returnTo ? `?returnTo=${returnTo}` : ''}`}
+                  className="link-accent"
+                >
                   Create account
                 </Link>
-                <Link href="/auth/login" className="link-muted">
+                <Link
+                  href={`/auth/login${returnTo ? `?returnTo=${returnTo}` : ''}`}
+                  className="link-muted"
+                >
                   Log in
                 </Link>
               </Flex>

@@ -4,15 +4,14 @@ import { useState } from 'react';
 import Image from 'next/image';
 import { Card } from '@radix-ui/themes';
 
-export interface AvatarGridProps {
+interface AvatarGridProps {
   seeds: string[];
   size?: number;
   onSelect?: (seed: string) => void;
-  /** Controlled selection (e.g. current session avatar seed) */
   selectedSeed?: string | null;
 }
 
-export function AvatarGrid({
+export default function AvatarGrid({
   seeds,
   size = 120,
   onSelect,

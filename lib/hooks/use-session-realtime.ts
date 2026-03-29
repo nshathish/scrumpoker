@@ -13,18 +13,28 @@ export function useSessionRealtime(sessionId: string) {
     const supabase = supabaseRef.current;
 
     const channel = supabase
-      .channel('participants-changes')
+      .channel(`session-${sessionId}`)
       .on(
         'postgres_changes',
-        { event: '*', schema: 'public', table: 'participants' },
-        (payload) => {
-          console.log('Change received!', payload);
-          router.refresh();
+        {
+          event: '*',
+          schema: 'public',
+          table: 'participants',
+          filter: `session_id=eq.${sessionId}`,
         },
+        () => router.refresh(),
       )
-      .subscribe((status) => {
-        console.log('Subscription status:', status);
-      });
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'sessions',
+          filter: `id=eq.${sessionId}`,
+        },
+        () => router.refresh(),
+      )
+      .subscribe();
 
     return () => {
       supabase.removeChannel(channel);

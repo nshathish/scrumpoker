@@ -9,7 +9,6 @@ import {
   findActiveSessionByOwner,
   findSessionByInviteCode,
   getDefaultDeck,
-  isParticipant,
 } from '@/lib/repositories/session';
 
 export async function bootstrapNewSession({
@@ -49,22 +48,20 @@ export async function bootstrapNewSession({
 export async function getOrJoinSession(inviteCode: string) {
   const user = await getAuthenticatedUser();
 
-  let session = await findSessionByInviteCode(inviteCode);
+  const session = await findSessionByInviteCode(inviteCode);
   if (!session) {
     notFound();
   }
 
-  const alreadyJoined = await isParticipant(session.id, user!.id);
-  if (!alreadyJoined) {
-    await addParticipant({
-      sessionId: session.id,
-      userId: user!.id,
-      role: 'VOTER',
-    });
-    session = await findSessionByInviteCode(inviteCode);
-  }
+  await addParticipant({
+    sessionId: session.id,
+    userId: user!.id,
+    role: 'VOTER',
+  });
 
-  if (!session) {
+  // Re-fetch to include the new participant in the response
+  const updatedSession = await findSessionByInviteCode(inviteCode);
+  if (!updatedSession) {
     notFound();
   }
 

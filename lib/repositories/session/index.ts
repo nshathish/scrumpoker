@@ -47,8 +47,12 @@ export async function addParticipant({
   userId: string;
   role?: ParticipantRole;
 }) {
-  return prisma.participant.create({
-    data: {
+  return prisma.participant.upsert({
+    where: {
+      sessionId_userId: { sessionId, userId },
+    },
+    update: {}, // already exists, do nothing
+    create: {
       sessionId,
       userId,
       role,
@@ -80,15 +84,6 @@ export async function findSessionByInviteCode(inviteCode: string) {
       },
     },
   });
-}
-
-export async function isParticipant(sessionId: string, userId: string) {
-  const participant = await prisma.participant.findUnique({
-    where: {
-      sessionId_userId: { sessionId, userId },
-    },
-  });
-  return Boolean(participant);
 }
 
 export async function deleteParticipantsByUserId(userId: string) {

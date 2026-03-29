@@ -48,10 +48,22 @@ export default function JoinGuestForm() {
   });
 
   useEffect(() => {
-    if (state.status === 'success') {
-      redirect({ spectator: String(spectatorField.value) });
+    if (state.status !== 'success') return;
+
+    const url = new URL(returnTo ?? '/session', window.location.origin);
+    const path = url.pathname.replace(/\/$/, '') || '/';
+    const isNewSessionBootstrap = path === '/session';
+
+    if (!isNewSessionBootstrap) {
+      redirect();
+      return;
     }
-  }, [state.status, redirect, spectatorField.value]);
+
+    // Bootstrap route (session/page.tsx) reads ?spectator=true; omit param for default voter.
+    redirect(
+      spectatorField.value ? { spectator: 'true' } : undefined,
+    );
+  }, [state.status, redirect, returnTo, spectatorField.value]);
 
   return (
     <Flex

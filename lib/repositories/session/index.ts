@@ -1,6 +1,5 @@
-import { generateSlug } from 'random-word-slugs';
-
 import prisma from '@/lib/prisma';
+import { generateRandomSessionName } from '@/lib/utils/random-words';
 
 import type { ParticipantRole } from '@/generated/prisma/enums';
 
@@ -63,13 +62,31 @@ export async function getDefaultDeck() {
   });
 }
 
-function generateRandomSessionName() {
-  return generateSlug(2, {
-    format: 'kebab',
-    partsOfSpeech: ['adjective', 'noun'],
-    categories: {
-      adjective: ['color', 'personality'],
-      noun: ['animals'],
+export async function findSessionByInviteCode(inviteCode: string) {
+  return prisma.session.findUnique({
+    where: { inviteCode },
+    include: {
+      deck: true,
+      participants: {
+        include: {
+          user: {
+            select: {
+              id: true,
+              displayName: true,
+              avatarSeed: true,
+            },
+          },
+        },
+      },
     },
   });
+}
+
+export async function isParticipant(sessionId: string, userId: string) {
+  const participant = await prisma.participant.findUnique({
+    where: {
+      sessionId_userId: { sessionId, userId },
+    },
+  });
+  return Boolean(participant);
 }

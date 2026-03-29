@@ -1,13 +1,15 @@
 'use server';
 
-import { redirect } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 
 import { getAuthenticatedUser } from '@/lib/auth';
 import {
   addParticipant,
   createSession,
   findActiveSessionByOwner,
+  findSessionByInviteCode,
   getDefaultDeck,
+  isParticipant,
 } from '@/lib/repositories/session';
 
 export async function bootstrapNewSession({
@@ -42,4 +44,24 @@ export async function bootstrapNewSession({
   });
 
   redirect(`/session/${session.inviteCode}`);
+}
+
+export async function getOrJoinSession(inviteCode: string) {
+  const user = await getAuthenticatedUser();
+
+  const session = await findSessionByInviteCode(inviteCode);
+  if (!session) {
+    notFound();
+  }
+
+  const alreadyJoined = await isParticipant(session.id, user!.id);
+  if (!alreadyJoined) {
+    await addParticipant({
+      sessionId: session.id,
+      userId: user!.id,
+      role: 'VOTER',
+    });
+  }
+
+  return { session, currentUserId: user!.id };
 }

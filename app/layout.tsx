@@ -39,6 +39,7 @@ export default function RootLayout({
           grayColor="sand"
           radius="large"
           scaling="95%"
+          className="flex min-h-0 flex-1 flex-col"
         >
           {children}
         </Theme>

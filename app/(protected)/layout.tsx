@@ -15,10 +15,12 @@ export default async function ProtectedLayout({
 
   return (
     <CurrentAvatarProvider initialSeed={user?.avatarSeed ?? 'default'}>
-      <ProtectedNavbar />
-      <div className="flex flex-1">
-        <Sidebar />
-        <main className="flex-1">{children}</main>
+      <div className="flex min-h-0 flex-1 flex-col">
+        <ProtectedNavbar />
+        <div className="flex min-h-0 flex-1">
+          <Sidebar />
+          <main className="flex min-h-0 flex-1 flex-col">{children}</main>
+        </div>
       </div>
     </CurrentAvatarProvider>
   );

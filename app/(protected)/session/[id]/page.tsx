@@ -1,9 +1,14 @@
-import { HomeSessionOverlays } from '@/app/(protected)/session/_components/HomeSessionOverlays';
-import { getAuthenticatedUser } from '@/lib/auth';
+import SessionView from '@/app/(protected)/session/_components/SessionView';
 
-export default async function SessionPage() {
-  const user = await getAuthenticatedUser();
-  const displayName = user?.displayName ?? 'Guest';
+import { getOrJoinSession } from '@/app/(protected)/session/actions';
 
-  return <HomeSessionOverlays displayName={displayName} />;
+export default async function SessionIdPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  const { session, currentUserId } = await getOrJoinSession(id);
+
+  return <SessionView session={session} currentUserId={currentUserId} />;
 }

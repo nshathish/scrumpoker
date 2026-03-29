@@ -65,5 +65,5 @@ export async function getOrJoinSession(inviteCode: string) {
     notFound();
   }
 
-  return { session, currentUserId: user!.id };
+  return { session: updatedSession, currentUserId: user!.id };
 }

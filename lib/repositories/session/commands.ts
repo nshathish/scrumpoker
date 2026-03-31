@@ -82,7 +82,7 @@ export async function advanceRound(sessionId: string) {
   });
 }
 
-export async function revealSessionVotes(sessionId: string) {
+export async function updateSessionStatusToRevealed(sessionId: string) {
   return prisma.session.update({
     where: { id: sessionId },
     data: { status: 'REVEALED' },

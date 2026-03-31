@@ -5,12 +5,13 @@ import { notFound, redirect } from 'next/navigation';
 import { getAuthenticatedUser } from '@/lib/auth';
 import {
   addParticipant,
+  advanceRound,
   createSession,
   findActiveSessionByOwner,
   findSessionByInviteCode,
   findSessionWithParticipantsAndVotes,
   getDefaultDeck,
-  revealSessionVotes,
+  updateSessionStatusToRevealed,
 } from '@/lib/repositories/session';
 import { castVote } from '@/lib/repositories/vote';
 
@@ -83,7 +84,9 @@ export async function submitVote(input: {
   return actionSuccess();
 }
 
-export async function revealSession(sessionId: string): Promise<ActionResult> {
+export async function revealSessionVotes(
+  sessionId: string,
+): Promise<ActionResult> {
   const user = await getAuthenticatedUser();
   if (!user) {
     return actionError('You must be signed in.');
@@ -116,7 +119,17 @@ export async function revealSession(sessionId: string): Promise<ActionResult> {
     return actionError('Wait until at least one other player has voted.');
   }
 
-  await revealSessionVotes(sessionId);
+  await updateSessionStatusToRevealed(sessionId);
 
+  return actionSuccess();
+}
+
+export async function startNewRound(sessionId: string): Promise<ActionResult> {
+  const user = await getAuthenticatedUser();
+  if (!user) {
+    return actionError('You must be signed in.');
+  }
+
+  await advanceRound(sessionId);
   return actionSuccess();
 }

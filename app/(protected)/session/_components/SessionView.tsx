@@ -8,7 +8,11 @@ import ProfileCard from '@/app/(protected)/session/_components/ProfileCard';
 import PokerPoints from '@/app/(protected)/session/_components/PokerPoints';
 import { useCurrentAvatar } from '@/components/avatar/CurrentAvatarContext';
 
-import { revealSession, submitVote } from '@/app/(protected)/session/actions';
+import {
+  revealSessionVotes,
+  startNewRound,
+  submitVote,
+} from '@/app/(protected)/session/actions';
 import { useServerAction } from '@/lib/hooks/use-server-action';
 import { useSessionRealtime } from '@/lib/hooks/use-session-realtime';
 
@@ -44,10 +48,13 @@ export default function SessionView({
   const router = useRouter();
 
   const { seed } = useCurrentAvatar();
+  const [estimate, setEstimate] = useState('');
+
   const { execute } = useServerAction(submitVote);
   const { execute: runReveal, isPending: isRevealing } =
-    useServerAction(revealSession);
-  const [estimate, setEstimate] = useState('');
+    useServerAction(revealSessionVotes);
+  const { execute: runNewRound, isPending: isResetting } =
+    useServerAction(startNewRound);
 
   useSessionRealtime(session.id);
 
@@ -83,7 +90,15 @@ export default function SessionView({
     runReveal(session.id).then((result) => {
       if (result.status === 'success') {
         router.refresh();
-        // void broadcastSessionRevealed();
+      }
+    });
+  };
+
+  const handleNewRound = () => {
+    setEstimate('');
+    runNewRound(session.id).then((result) => {
+      if (result.status === 'success') {
+        router.refresh();
       }
     });
   };
@@ -102,6 +117,7 @@ export default function SessionView({
             {isRevealed ? 'Revealed' : 'Reveal votes'}
           </Button>
         </div>
+
         <div className="flex min-h-0 flex-1 items-center justify-center">
           <Flex
             direction="row"
@@ -111,28 +127,48 @@ export default function SessionView({
             align="center"
           >
             {session.participants.map((participant) => {
-              const hasVotedThisRound = participant.votes.some(
+              const voteThisRound = participant.votes.find(
                 (v) => v.round === session.currentRound,
               );
               const isCurrentUser = participant.userId === currentUserId;
+              const participantName =
+                participant.role === 'SPECTATOR'
+                  ? `${participant.user.displayName} (spectator)`
+                  : participant.user.displayName;
+
+              const estimateCalculated = isCurrentUser
+                ? estimate
+                : isRevealed
+                  ? voteThisRound?.value
+                  : undefined;
 
               return (
                 <ProfileCard
                   key={participant.id}
                   seed={isCurrentUser ? seed : participant.user.avatarSeed}
-                  name={
-                    participant.role === 'SPECTATOR'
-                      ? `${participant.user.displayName} (spectator)`
-                      : participant.user.displayName
-                  }
-                  estimate={isCurrentUser ? estimate : undefined}
-                  hasVoted={hasVotedThisRound}
+                  name={participantName}
+                  estimate={estimateCalculated}
+                  hasVoted={Boolean(voteThisRound)}
                   isCurrentUser={isCurrentUser}
                 />
               );
             })}
           </Flex>
         </div>
+
+        {isRevealed && (
+          <div className="flex shrink-0 justify-center pt-4 pb-3">
+            <Button
+              size="3"
+              variant="outline"
+              onClick={handleNewRound}
+              disabled={isResetting}
+              highContrast
+            >
+              {isResetting ? 'Resetting...' : 'New round'}
+            </Button>
+          </div>
+        )}
       </div>
 
       {/* Card selection - only for voters while voting */}

@@ -1,13 +1,14 @@
 'use client';
 
 import { useState } from 'react';
-import { Flex } from '@radix-ui/themes';
+import { useRouter } from 'next/navigation';
+import { Button, Flex } from '@radix-ui/themes';
 
 import ProfileCard from '@/app/(protected)/session/_components/ProfileCard';
 import PokerPoints from '@/app/(protected)/session/_components/PokerPoints';
 import { useCurrentAvatar } from '@/components/avatar/CurrentAvatarContext';
 
-import { submitVote } from '@/app/(protected)/session/actions';
+import { revealSession, submitVote } from '@/app/(protected)/session/actions';
 import { useServerAction } from '@/lib/hooks/use-server-action';
 import { useSessionRealtime } from '@/lib/hooks/use-session-realtime';
 
@@ -40,11 +41,31 @@ export default function SessionView({
   session,
   currentUserId,
 }: SessionViewProps) {
+  const router = useRouter();
+
   const { seed } = useCurrentAvatar();
   const { execute } = useServerAction(submitVote);
+  const { execute: runReveal, isPending: isRevealing } =
+    useServerAction(revealSession);
   const [estimate, setEstimate] = useState('');
 
   useSessionRealtime(session.id);
+
+  const currentUser = session.participants.find(
+    (p) => p.userId === currentUserId,
+  );
+
+  const anotherVoterHasSubmitted = session.participants.some(
+    (p) =>
+      p.userId !== currentUserId &&
+      p.role === 'VOTER' &&
+      p.votes.some((v) => v.round === session.currentRound),
+  );
+
+  const isSpectator = currentUser?.role === 'SPECTATOR';
+  const isRevealed = session.status === 'REVEALED';
+  const isVoting = session.status === 'VOTING';
+  const canReveal = isVoting && anotherVoterHasSubmitted;
 
   const handleVote = (value: string) => {
     setEstimate(value);
@@ -58,14 +79,29 @@ export default function SessionView({
     }
   };
 
-  const currentUser = session.participants.find(
-    (p) => p.userId === currentUserId,
-  );
-  const isSpectator = currentUser?.role === 'SPECTATOR';
+  const handleReveal = () => {
+    runReveal(session.id).then((result) => {
+      if (result.status === 'success') {
+        router.refresh();
+        // void broadcastSessionRevealed();
+      }
+    });
+  };
 
   return (
     <>
       <div className="flex min-h-0 flex-1 flex-col px-4 pb-32">
+        <div className="flex shrink-0 justify-center pt-4 pb-3">
+          <Button
+            size="3"
+            variant="solid"
+            disabled={!canReveal || isRevealing}
+            onClick={handleReveal}
+            highContrast
+          >
+            {isRevealed ? 'Revealed' : 'Reveal votes'}
+          </Button>
+        </div>
         <div className="flex min-h-0 flex-1 items-center justify-center">
           <Flex
             direction="row"
@@ -99,8 +135,8 @@ export default function SessionView({
         </div>
       </div>
 
-      {/* Card selection - only for voters */}
-      {!isSpectator && (
+      {/* Card selection - only for voters while voting */}
+      {!isSpectator && isVoting && (
         <PokerPoints
           cards={session.deck.cards}
           value={estimate}

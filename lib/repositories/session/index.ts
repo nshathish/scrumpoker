@@ -83,6 +83,17 @@ export async function getDefaultDeck() {
   });
 }
 
+export async function findSessionWithParticipantsAndVotes(sessionId: string) {
+  return prisma.session.findUnique({
+    where: { id: sessionId },
+    include: {
+      participants: {
+        include: { votes: true },
+      },
+    },
+  });
+}
+
 export async function findSessionByInviteCode(inviteCode: string) {
   return prisma.session.findUnique({
     where: { inviteCode },
@@ -117,5 +128,12 @@ export async function advanceRound(sessionId: string) {
       currentRound: { increment: 1 },
       status: 'VOTING',
     },
+  });
+}
+
+export async function revealSessionVotes(sessionId: string) {
+  return prisma.session.update({
+    where: { id: sessionId },
+    data: { status: 'REVEALED' },
   });
 }

@@ -1,13 +1,14 @@
 'use client';
 
 import { useState } from 'react';
-import { Flex } from '@radix-ui/themes';
+import { useRouter } from 'next/navigation';
+import { Button, Flex } from '@radix-ui/themes';
 
 import ProfileCard from '@/app/(protected)/session/_components/ProfileCard';
 import PokerPoints from '@/app/(protected)/session/_components/PokerPoints';
 import { useCurrentAvatar } from '@/components/avatar/CurrentAvatarContext';
 
-import { submitVote } from '@/app/(protected)/session/actions';
+import { revealSession, submitVote } from '@/app/(protected)/session/actions';
 import { useServerAction } from '@/lib/hooks/use-server-action';
 import { useSessionRealtime } from '@/lib/hooks/use-session-realtime';
 
@@ -40,11 +41,14 @@ export default function SessionView({
   session,
   currentUserId,
 }: SessionViewProps) {
+  const router = useRouter();
   const { seed } = useCurrentAvatar();
   const { execute } = useServerAction(submitVote);
+  const { execute: runReveal, isPending: isRevealing } =
+    useServerAction(revealSession);
   const [estimate, setEstimate] = useState('');
 
-  useSessionRealtime(session.id);
+  const { broadcastSessionRevealed } = useSessionRealtime(session.id);
 
   const handleVote = (value: string) => {
     setEstimate(value);
@@ -62,10 +66,41 @@ export default function SessionView({
     (p) => p.userId === currentUserId,
   );
   const isSpectator = currentUser?.role === 'SPECTATOR';
+  const isRevealed = session.status === 'REVEALED';
+  const isVoting = session.status === 'VOTING';
+
+  const anotherVoterHasSubmitted = session.participants.some(
+    (p) =>
+      p.userId !== currentUserId &&
+      p.role === 'VOTER' &&
+      p.votes.some((v) => v.round === session.currentRound),
+  );
+
+  const canReveal = isVoting && anotherVoterHasSubmitted;
+
+  const handleReveal = () => {
+    runReveal(session.id).then((result) => {
+      if (result.status === 'success') {
+        router.refresh();
+        void broadcastSessionRevealed();
+      }
+    });
+  };
 
   return (
     <>
       <div className="flex min-h-0 flex-1 flex-col px-4 pb-32">
+        <div className="flex shrink-0 justify-center pt-4 pb-3">
+          <Button
+            size="3"
+            variant="solid"
+            disabled={!canReveal || isRevealing}
+            onClick={handleReveal}
+            highContrast
+          >
+            {isRevealed ? 'Revealed' : 'Reveal votes'}
+          </Button>
+        </div>
         <div className="flex min-h-0 flex-1 items-center justify-center">
           <Flex
             direction="row"
@@ -79,6 +114,9 @@ export default function SessionView({
                 (v) => v.round === session.currentRound,
               );
               const isCurrentUser = participant.userId === currentUserId;
+              const roundVote = participant.votes.find(
+                (v) => v.round === session.currentRound,
+              );
 
               return (
                 <ProfileCard
@@ -92,6 +130,8 @@ export default function SessionView({
                   estimate={isCurrentUser ? estimate : undefined}
                   hasVoted={hasVotedThisRound}
                   isCurrentUser={isCurrentUser}
+                  isRevealed={isRevealed}
+                  revealedValue={roundVote?.value ?? null}
                 />
               );
             })}
@@ -99,8 +139,8 @@ export default function SessionView({
         </div>
       </div>
 
-      {/* Card selection - only for voters */}
-      {!isSpectator && (
+      {/* Card selection - only for voters while voting */}
+      {!isSpectator && isVoting && (
         <PokerPoints
           cards={session.deck.cards}
           value={estimate}

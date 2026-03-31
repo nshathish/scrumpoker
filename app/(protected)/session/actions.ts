@@ -8,7 +8,9 @@ import {
   createSession,
   findActiveSessionByOwner,
   findSessionByInviteCode,
+  findSessionWithParticipantsAndVotes,
   getDefaultDeck,
+  revealSessionVotes,
 } from '@/lib/repositories/session';
 import { actionError, ActionResult, actionSuccess } from '@/lib/types';
 import { castVote } from '@/lib/repositories/vote';
@@ -77,5 +79,42 @@ export async function submitVote(input: {
   value: string;
 }): Promise<ActionResult> {
   await castVote(input);
+  return actionSuccess();
+}
+
+export async function revealSession(sessionId: string): Promise<ActionResult> {
+  const user = await getAuthenticatedUser();
+  if (!user) {
+    return actionError('You must be signed in.');
+  }
+
+  const session = await findSessionWithParticipantsAndVotes(sessionId);
+
+  if (!session) {
+    return actionError('Session not found.');
+  }
+
+  const isParticipant = session.participants.some((p) => p.userId === user.id);
+  if (!isParticipant) {
+    return actionError('Not part of this session.');
+  }
+
+  if (session.status !== 'VOTING') {
+    return actionError('Votes are already revealed.');
+  }
+
+  const round = session.currentRound;
+  const anotherVoterHasSubmitted = session.participants.some(
+    (p) =>
+      p.userId !== user.id &&
+      p.role === 'VOTER' &&
+      p.votes.some((v) => v.round === round),
+  );
+
+  if (!anotherVoterHasSubmitted) {
+    return actionError('Wait until at least one other player has voted.');
+  }
+
+  await revealSessionVotes(sessionId);
   return actionSuccess();
 }

@@ -12,6 +12,13 @@ export async function castVote({
   round: number;
   value: string;
 }) {
+  if (!value.trim()) {
+    await prisma.vote.deleteMany({
+      where: { sessionId, participantId, round },
+    });
+    return null;
+  }
+
   try {
     return await prisma.vote.upsert({
       where: {

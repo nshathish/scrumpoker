@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { startTransition, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button, Flex } from '@radix-ui/themes';
 
@@ -15,6 +15,7 @@ import {
 } from '@/app/(protected)/session/actions';
 import { useServerAction } from '@/lib/hooks/use-server-action';
 import { useSessionRealtime } from '@/lib/hooks/use-session-realtime';
+import { nearestFibonacci } from '@/lib/utils/fibonacci';
 
 import type { SessionGetPayload } from '@/generated/prisma/models/Session';
 
@@ -74,6 +75,28 @@ export default function SessionView({
   const isVoting = session.status === 'VOTING';
   const canReveal = isVoting && anotherVoterHasSubmitted;
 
+  const numericVotes = session.participants
+    .filter((p) => p.role === 'VOTER')
+    .map((p) => p.votes.find((v) => v.round === session.currentRound))
+    .filter((v): v is NonNullable<typeof v> => v !== undefined)
+    .map((v) => Number(v.value))
+    .filter((n) => !isNaN(n));
+
+  const average =
+    numericVotes.length > 0
+      ? numericVotes.reduce((sum, v) => sum + v, 0) / numericVotes.length
+      : 0;
+
+  const consensus = nearestFibonacci(average);
+
+  useEffect(() => {
+    if (session.status === 'VOTING') {
+      startTransition(() => {
+        setEstimate('');
+      });
+    }
+  }, [session.status]);
+
   const handleVote = (value: string) => {
     setEstimate(value);
     if (currentUser) {
@@ -118,6 +141,26 @@ export default function SessionView({
           </Button>
         </div>
 
+        {isRevealed && numericVotes.length > 0 && (
+          <div className="flex shrink-0 flex-col items-center gap-1 pb-3">
+            {consensus.includes(' or ') ? (
+              <div className="flex items-center gap-2">
+                <span className="text-4xl font-bold text-slate-700">
+                  {consensus.split(' or ')[0]}
+                </span>
+                <span className="text-3xl">🤔</span>
+                <span className="text-4xl font-bold text-slate-700">
+                  {consensus.split(' or ')[1]}
+                </span>
+              </div>
+            ) : (
+              <span className="text-4xl font-bold text-slate-700">
+                {consensus}
+              </span>
+            )}
+          </div>
+        )}
+
         <div className="flex min-h-0 flex-1 items-center justify-center">
           <Flex
             direction="row"
@@ -141,6 +184,13 @@ export default function SessionView({
                 : isRevealed
                   ? voteThisRound?.value
                   : undefined;
+
+              console.log(participant.user.displayName, {
+                isCurrentUser,
+                isRevealed,
+                voteThisRound,
+                estimateCalculated,
+              });
 
               return (
                 <ProfileCard

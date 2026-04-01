@@ -1,6 +1,7 @@
 'use server';
 
 import { notFound, redirect } from 'next/navigation';
+import { unstable_noStore as noStore } from 'next/cache';
 
 import { getAuthenticatedUser } from '@/lib/auth';
 import {
@@ -52,6 +53,8 @@ export async function bootstrapNewSession({
 }
 
 export async function getOrJoinSession(inviteCode: string) {
+  noStore();
+
   const user = await getAuthenticatedUser();
 
   const session = await findSessionByInviteCode(inviteCode);

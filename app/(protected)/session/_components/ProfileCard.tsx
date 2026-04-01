@@ -22,8 +22,8 @@ export default function ProfileCard({
   avatarSize = 72,
   className = '',
 }: ProfileCardProps) {
-  const picked = isCurrentUser && estimate.length > 0;
-  const showVotedMask = !isCurrentUser && hasVoted;
+  const picked = estimate.length > 0;
+  const showVotedMask = !isCurrentUser && hasVoted && !picked;
 
   return (
     <div

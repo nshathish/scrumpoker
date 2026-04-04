@@ -25,9 +25,6 @@ export async function bootstrapNewSession({
 }): Promise<never> {
   const user = await getAuthenticatedUser();
 
-  // TODO: remove - artificial delay to test loading state
-  await new Promise((resolve) => setTimeout(resolve, 2000));
-
   const existing = await findActiveSessionByOwner(user!.id);
   if (existing) {
     redirect(`/session/${existing.inviteCode}`);

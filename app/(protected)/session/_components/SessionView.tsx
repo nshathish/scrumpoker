@@ -145,16 +145,16 @@ export default function SessionView({
           <div className="flex shrink-0 flex-col items-center gap-1 pb-3">
             {consensus.includes(' or ') ? (
               <div className="flex items-center gap-2">
-                <span className="text-4xl font-bold text-slate-700">
+                <span className="text-7xl leading-none font-bold text-slate-700 md:text-8xl">
                   {consensus.split(' or ')[0]}
                 </span>
-                <span className="text-3xl">🤔</span>
-                <span className="text-4xl font-bold text-slate-700">
+                <span className="text-5xl md:text-6xl">🤔</span>
+                <span className="text-7xl leading-none font-bold text-slate-700 md:text-8xl">
                   {consensus.split(' or ')[1]}
                 </span>
               </div>
             ) : (
-              <span className="text-4xl font-bold text-slate-700">
+              <span className="text-7xl leading-none font-bold text-slate-700 md:text-8xl">
                 {consensus}
               </span>
             )}
@@ -185,13 +185,6 @@ export default function SessionView({
                   ? voteThisRound?.value
                   : undefined;
 
-              console.log(participant.user.displayName, {
-                isCurrentUser,
-                isRevealed,
-                voteThisRound,
-                estimateCalculated,
-              });
-
               return (
                 <ProfileCard
                   key={participant.id}
@@ -209,8 +202,8 @@ export default function SessionView({
         {isRevealed && (
           <div className="flex shrink-0 justify-center pt-4 pb-3">
             <Button
-              size="3"
-              variant="outline"
+              size="4"
+              variant="solid"
               onClick={handleNewRound}
               disabled={isResetting}
               highContrast

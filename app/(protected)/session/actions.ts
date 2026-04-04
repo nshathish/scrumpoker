@@ -49,7 +49,10 @@ export async function bootstrapNewSession({
   redirect(`/session/${session.inviteCode}`);
 }
 
-export async function getOrJoinSession(inviteCode: string) {
+export async function getOrJoinSession(
+  inviteCode: string,
+  spectator?: boolean,
+) {
   noStore();
 
   const user = await getAuthenticatedUser();
@@ -62,7 +65,7 @@ export async function getOrJoinSession(inviteCode: string) {
   await addParticipant({
     sessionId: session.id,
     userId: user!.id,
-    role: 'VOTER',
+    role: spectator ? 'SPECTATOR' : 'VOTER',
   });
 
   // Re-fetch to include the new participant in the response
@@ -80,6 +83,32 @@ export async function submitVote(input: {
   round: number;
   value: string;
 }): Promise<ActionResult> {
+  const user = await getAuthenticatedUser();
+  if (!user) {
+    return actionError('You must be signed in.');
+  }
+
+  const session = await findSessionWithParticipantsAndVotes(input.sessionId);
+  if (!session) {
+    return actionError('Session not found.');
+  }
+
+  const participant = session.participants.find(
+    (p) => p.id === input.participantId,
+  );
+
+  if (!participant || participant.userId !== user.id) {
+    return actionError('Not part of this session.');
+  }
+
+  if (participant.role !== 'VOTER') {
+    return actionError('Spectators cannot vote.');
+  }
+
+  if (session.status !== 'VOTING') {
+    return actionError('Voting is closed for this round.');
+  }
+
   await castVote(input);
   return actionSuccess();
 }

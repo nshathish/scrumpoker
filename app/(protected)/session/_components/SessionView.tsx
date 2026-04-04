@@ -2,6 +2,7 @@
 
 import { startTransition, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import dynamic from 'next/dynamic';
 import { Button, Flex } from '@radix-ui/themes';
 
 import ProfileCard from '@/app/(protected)/session/_components/ProfileCard';
@@ -19,6 +20,11 @@ import { useSessionRealtime } from '@/lib/hooks/use-session-realtime';
 import { nearestFibonacci } from '@/lib/utils/fibonacci';
 
 import type { SessionGetPayload } from '@/generated/prisma/models/Session';
+
+const Fireworks = dynamic(
+  () => import('@/app/(protected)/session/_components/Fireworks'),
+  { ssr: false },
+);
 
 type SessionWithParticipants = SessionGetPayload<{
   include: {
@@ -83,12 +89,29 @@ export default function SessionView({
     .map((v) => Number(v.value))
     .filter((n) => !isNaN(n));
 
+  const voterParticipants = session.participants.filter(
+    (p) => p.role === 'VOTER',
+  );
+
+  const roundVoteValues = voterParticipants
+    .map((p) => p.votes.find((v) => v.round === session.currentRound)?.value)
+    .filter((value): value is string => Boolean(value));
+
   const average =
     numericVotes.length > 0
       ? numericVotes.reduce((sum, v) => sum + v, 0) / numericVotes.length
       : 0;
 
   const consensus = nearestFibonacci(average);
+
+  const allVotersSubmitted =
+    voterParticipants.length > 0 &&
+    roundVoteValues.length === voterParticipants.length;
+
+  const allVotesMatch =
+    allVotersSubmitted && new Set(roundVoteValues).size === 1;
+
+  const shouldShowFireworks = isRevealed && allVotesMatch && !isResetting;
 
   useEffect(() => {
     if (session.status === 'VOTING') {
@@ -130,6 +153,8 @@ export default function SessionView({
   return (
     <>
       <div className="flex min-h-0 flex-1 flex-col px-4 pb-32">
+        {shouldShowFireworks && <Fireworks />}
+
         <div className="flex shrink-0 justify-center pt-4 pb-3">
           <Button
             size="4"

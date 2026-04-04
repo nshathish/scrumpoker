@@ -1,8 +1,9 @@
 'use client';
 
+import dynamic from 'next/dynamic';
+import Image from 'next/image';
 import { startTransition, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import dynamic from 'next/dynamic';
 import { Button, Flex } from '@radix-ui/themes';
 
 import ProfileCard from '@/app/(protected)/session/_components/ProfileCard';
@@ -89,8 +90,9 @@ export default function SessionView({
     .map((v) => Number(v.value))
     .filter((n) => !isNaN(n));
 
-  const voterParticipants = session.participants.filter(
-    (p) => p.role === 'VOTER',
+  const voterParticipants = session.participants.filter((p) => p.role === 'VOTER');
+  const spectatorParticipants = session.participants.filter(
+    (p) => p.role === 'SPECTATOR',
   );
 
   const roundVoteValues = voterParticipants
@@ -190,41 +192,79 @@ export default function SessionView({
         )}
 
         <div className="flex min-h-0 flex-1 items-center justify-center">
-          <Flex
-            direction="row"
-            gap="5"
-            wrap="wrap"
-            justify="center"
-            align="center"
-          >
-            {session.participants.map((participant) => {
-              const voteThisRound = participant.votes.find(
-                (v) => v.round === session.currentRound,
-              );
-              const isCurrentUser = participant.userId === currentUserId;
-              const participantName =
-                participant.role === 'SPECTATOR'
-                  ? `${participant.user.displayName} (spectator)`
-                  : participant.user.displayName;
+          <div className="flex w-full flex-col items-center gap-4">
+            {spectatorParticipants.length > 0 && (
+              <div className="flex shrink-0 flex-col items-center gap-3">
+                <p
+                  className="text-center text-base tracking-wide text-slate-500"
+                  style={{ fontFamily: 'var(--font-geist-mono), ui-monospace, monospace' }}
+                >
+                  {`Spectators (${spectatorParticipants.length})`}
+                </p>
+                <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
+                  {spectatorParticipants.map((participant) => {
+                    const spectatorSeed =
+                      participant.userId === currentUserId
+                        ? seed
+                        : participant.user.avatarSeed;
 
-              const estimateCalculated = isCurrentUser
-                ? estimate
-                : isRevealed
-                  ? voteThisRound?.value
-                  : undefined;
+                    return (
+                      <div key={participant.id} className="flex items-center gap-2 text-slate-800">
+                        <Image
+                          src={`/api/avatar?seed=${encodeURIComponent(spectatorSeed)}&v=2`}
+                          alt={`${participant.user.displayName} avatar`}
+                          width={28}
+                          height={28}
+                          unoptimized
+                          loading="eager"
+                          className="rounded-full"
+                        />
+                        <span
+                          className="max-w-40 truncate text-lg"
+                          style={{ fontFamily: 'var(--font-geist-mono), ui-monospace, monospace' }}
+                          title={participant.user.displayName}
+                        >
+                          {participant.user.displayName}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
 
-              return (
-                <ProfileCard
-                  key={participant.id}
-                  seed={isCurrentUser ? seed : participant.user.avatarSeed}
-                  name={participantName}
-                  estimate={estimateCalculated}
-                  hasVoted={Boolean(voteThisRound)}
-                  isCurrentUser={isCurrentUser}
-                />
-              );
-            })}
-          </Flex>
+            <Flex
+              direction="row"
+              gap="5"
+              wrap="wrap"
+              justify="center"
+              align="center"
+            >
+              {voterParticipants.map((participant) => {
+                const voteThisRound = participant.votes.find(
+                  (v) => v.round === session.currentRound,
+                );
+                const isCurrentUser = participant.userId === currentUserId;
+
+                const estimateCalculated = isCurrentUser
+                  ? estimate
+                  : isRevealed
+                    ? voteThisRound?.value
+                    : undefined;
+
+                return (
+                  <ProfileCard
+                    key={participant.id}
+                    seed={isCurrentUser ? seed : participant.user.avatarSeed}
+                    name={participant.user.displayName}
+                    estimate={estimateCalculated}
+                    hasVoted={Boolean(voteThisRound)}
+                    isCurrentUser={isCurrentUser}
+                  />
+                );
+              })}
+            </Flex>
+          </div>
         </div>
 
         {isRevealed && (

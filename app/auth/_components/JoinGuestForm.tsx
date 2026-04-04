@@ -50,20 +50,11 @@ export default function JoinGuestForm() {
   useEffect(() => {
     if (state.status !== 'success') return;
 
-    const url = new URL(returnTo ?? '/session', window.location.origin);
-    const path = url.pathname.replace(/\/$/, '') || '/';
-    const isNewSessionBootstrap = path === '/session';
-
-    if (!isNewSessionBootstrap) {
-      redirect();
-      return;
-    }
-
-    // Bootstrap route (session/page.tsx) reads ?spectator=true; omit param for default voter.
+    // Session routes read ?spectator=true; omit param for default voter.
     redirect(
       spectatorField.value ? { spectator: 'true' } : undefined,
     );
-  }, [state.status, redirect, returnTo, spectatorField.value]);
+  }, [state.status, redirect, spectatorField.value]);
 
   return (
     <Flex

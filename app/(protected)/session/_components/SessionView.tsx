@@ -6,6 +6,7 @@ import { Button, Flex } from '@radix-ui/themes';
 
 import ProfileCard from '@/app/(protected)/session/_components/ProfileCard';
 import PokerPoints from '@/app/(protected)/session/_components/PokerPoints';
+import LoadingSpinner from '@/app/(protected)/session/_components/LoadingSpinner';
 import { useCurrentAvatar } from '@/components/avatar/CurrentAvatarContext';
 
 import {
@@ -131,7 +132,7 @@ export default function SessionView({
       <div className="flex min-h-0 flex-1 flex-col px-4 pb-32">
         <div className="flex shrink-0 justify-center pt-4 pb-3">
           <Button
-            size="3"
+            size="4"
             variant="solid"
             disabled={!canReveal || isRevealing}
             onClick={handleReveal}
@@ -140,6 +141,8 @@ export default function SessionView({
             {isRevealed ? 'Revealed' : 'Reveal votes'}
           </Button>
         </div>
+
+        {isRevealing && <LoadingSpinner />}
 
         {isRevealed && numericVotes.length > 0 && (
           <div className="flex shrink-0 flex-col items-center gap-1 pb-3">

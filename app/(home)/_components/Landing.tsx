@@ -93,7 +93,7 @@ export function Landing() {
                 and a focused UI so the team stays on the work—not the politics.
               </p>
               <div className="mt-10 flex flex-wrap items-center gap-4">
-                <Button
+                {/*<Button
                   asChild
                   size="3"
                   variant="solid"
@@ -101,7 +101,7 @@ export function Landing() {
                   highContrast
                 >
                   <Link href="/play">Open planning table</Link>
-                </Button>
+                </Button>*/}
                 <Button asChild size="3" variant="outline" color="gray">
                   <a href="#features">See what&apos;s included</a>
                 </Button>
@@ -223,7 +223,7 @@ export function Landing() {
               className="mt-8"
               highContrast
             >
-              <Link href="/play">Start session</Link>
+              <Link href="/session">Start session</Link>
             </Button>
           </div>
         </section>

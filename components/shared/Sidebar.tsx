@@ -6,6 +6,8 @@ import { useState } from 'react';
 import { Flex, IconButton, Popover, Text, Tooltip } from '@radix-ui/themes';
 import { Link2, List, PieChart, Settings } from 'lucide-react';
 
+import QRBox from '@/components/qrcode/QRBox';
+
 export default function Sidebar() {
   const params = useParams();
   const inviteCode = params.id as string | undefined;
@@ -62,10 +64,8 @@ export default function Sidebar() {
               <Text size="2" weight="medium">
                 Scan QR to join
               </Text>
-              <div className="sidebar-qr-placeholder">
-                <Text size="1" color="gray">
-                  QR code coming soon
-                </Text>
+              <div className="flex justify-center">
+                <QRBox />
               </div>
             </Flex>
           </Popover.Content>
@@ -97,7 +97,7 @@ export default function Sidebar() {
                 Issues
               </Text>
               <Text size="2" color="gray">
-                No issues added yet
+                feature coming soon
               </Text>
             </Flex>
           </Popover.Content>
@@ -129,7 +129,7 @@ export default function Sidebar() {
                 Results
               </Text>
               <Text size="2" color="gray">
-                No votes yet
+                feature coming soon
               </Text>
             </Flex>
           </Popover.Content>
@@ -161,7 +161,7 @@ export default function Sidebar() {
                 Settings
               </Text>
               <Text size="2" color="gray">
-                Session settings coming soon
+                feature coming soon
               </Text>
             </Flex>
           </Popover.Content>

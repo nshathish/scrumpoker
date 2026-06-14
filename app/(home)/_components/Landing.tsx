@@ -1,6 +1,7 @@
 import Link from 'next/link';
 
 import { Button, Heading, Text } from '@radix-ui/themes';
+import AppLogo from '@/components/shared/AppLogo';
 
 const features = [
   {
@@ -39,12 +40,9 @@ export function Landing() {
   return (
     <div className="min-h-screen text-slate-900 dark:text-slate-100">
       <header className="sticky top-0 z-50 border-b border-slate-200/80 bg-[var(--background)]/85 backdrop-blur-md dark:border-slate-800/80">
-        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
-          <Link
-            href="/"
-            className="font-semibold tracking-tight text-slate-900 dark:text-slate-50"
-          >
-            Scrum Poker
+        <div className="mx-auto flex min-h-16 max-w-6xl items-center justify-between gap-4 px-4 py-2 sm:px-6">
+          <Link href="/" aria-label="Scrum Poker home">
+            <AppLogo width={120} />
           </Link>
           <nav
             className="hidden items-center gap-8 text-sm font-medium text-slate-600 dark:text-slate-400 sm:flex"

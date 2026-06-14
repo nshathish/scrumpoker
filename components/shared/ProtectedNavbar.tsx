@@ -1,7 +1,8 @@
 import Link from 'next/link';
-import { Flex, Text } from '@radix-ui/themes';
+import { Flex } from '@radix-ui/themes';
 
 import UserMenu from '@/components/shared/UserMenu';
+import AppLogo from '@/components/shared/AppLogo';
 
 import { getAuthenticatedUser } from '@/lib/auth';
 
@@ -9,11 +10,13 @@ export default async function ProtectedNavbar() {
   const user = await getAuthenticatedUser();
 
   return (
-    <nav className="border-b">
-      <Flex align="center" justify="between" px="6" py="3">
-        <Text size="4" weight="bold" asChild>
-          <Link href="/">Scrum Poker</Link>
-        </Text>
+    <nav className="border-b bg-[#fefefe]">
+      <Flex align="center" justify="between" px="6" py="2">
+        <Flex align="center" gap="2" asChild>
+          <Link href="/">
+            <AppLogo width={120} />
+          </Link>
+        </Flex>
 
         <Flex align="center" gap="4">
           {/* add session-specific links here later */}

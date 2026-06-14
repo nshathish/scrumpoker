@@ -9,9 +9,11 @@ import {
   advanceRound,
   createSession,
   findActiveSessionByOwner,
+  findParticipantById,
   findSessionByInviteCode,
   findSessionWithParticipantsAndVotes,
   getDefaultDeck,
+  updateParticipantRole,
   updateSessionStatusToRevealed,
 } from '@/lib/repositories/session';
 import { castVote } from '@/lib/repositories/vote';
@@ -150,6 +152,22 @@ export async function revealSessionVotes(
 
   await updateSessionStatusToRevealed(sessionId);
 
+  return actionSuccess();
+}
+
+export async function switchParticipantRole(
+  participantId: string,
+  newRole: 'VOTER' | 'SPECTATOR',
+): Promise<ActionResult> {
+  const user = await getAuthenticatedUser();
+  if (!user) return actionError('You must be signed in.');
+
+  const participant = await findParticipantById(participantId);
+  if (!participant || participant.userId !== user.id) {
+    return actionError('Not authorized.');
+  }
+
+  await updateParticipantRole(participantId, newRole);
   return actionSuccess();
 }
 

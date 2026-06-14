@@ -2,12 +2,15 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Avatar, DropdownMenu, Text } from '@radix-ui/themes';
 
 import AvatarModal from '@/components/avatar/AvatarModal';
 import { useCurrentAvatar } from '@/components/avatar/CurrentAvatarContext';
+import { useParticipant } from '@/components/participant/ParticipantContext';
 
 import { logout } from '@/app/auth/actions';
+import { switchParticipantRole } from '@/app/(protected)/session/actions';
 import { getAvatarUrl } from '@/lib/utils/avatar';
 
 interface UserMenuProps {
@@ -32,7 +35,16 @@ const seeds = [
 
 export default function UserMenu({ email, isRegistered }: UserMenuProps) {
   const { seed } = useCurrentAvatar();
+  const { participant } = useParticipant();
+  const router = useRouter();
   const [avatarModalOpen, setAvatarModalOpen] = useState(false);
+
+  const handleSwitchRole = async () => {
+    if (!participant) return;
+    const newRole = participant.role === 'VOTER' ? 'SPECTATOR' : 'VOTER';
+    await switchParticipantRole(participant.id, newRole);
+    router.refresh();
+  };
 
   return (
     <>
@@ -84,6 +96,17 @@ export default function UserMenu({ email, isRegistered }: UserMenuProps) {
           <DropdownMenu.Item asChild>
             <Link href="/feedback/board">Feedback board</Link>
           </DropdownMenu.Item>
+
+          {participant && (
+            <>
+              <DropdownMenu.Separator />
+              <DropdownMenu.Item onClick={handleSwitchRole}>
+                {participant.role === 'VOTER'
+                  ? 'Switch to Spectator'
+                  : 'Switch to Contributor'}
+              </DropdownMenu.Item>
+            </>
+          )}
 
           <DropdownMenu.Separator />
 

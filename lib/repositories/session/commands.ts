@@ -72,6 +72,16 @@ export async function deleteParticipantsByUserId(userId: string) {
   });
 }
 
+export async function updateParticipantRole(
+  participantId: string,
+  role: ParticipantRole,
+) {
+  return prisma.participant.update({
+    where: { id: participantId },
+    data: { role },
+  });
+}
+
 export async function advanceRound(sessionId: string) {
   return prisma.session.update({
     where: { id: sessionId },

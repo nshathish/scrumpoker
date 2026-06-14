@@ -76,6 +76,10 @@ export async function findSessionWithParticipantsAndVotes(sessionId: string) {
   });
 }
 
+export async function findParticipantById(participantId: string) {
+  return prisma.participant.findUnique({ where: { id: participantId } });
+}
+
 export async function getDefaultDeck() {
   return prisma.deck.findFirst({
     where: { name: 'Fibonacci' },

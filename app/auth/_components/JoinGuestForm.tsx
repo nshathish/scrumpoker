@@ -106,7 +106,7 @@ export default function JoinGuestForm() {
                   </Flex>
 
                   <Button type="submit" size="3" disabled={isPending}>
-                    {isPending ? 'Joining...' : 'Join as guest'}
+                    {isPending ? 'Joining...' : spectatorField.value ? 'Join as Spectator' : 'Join as Contributor'}
                   </Button>
                 </Flex>
               </form>

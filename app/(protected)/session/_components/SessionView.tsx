@@ -10,6 +10,7 @@ import ProfileCard from '@/app/(protected)/session/_components/ProfileCard';
 import PokerPoints from '@/app/(protected)/session/_components/PokerPoints';
 import LoadingSpinner from '@/app/(protected)/session/_components/LoadingSpinner';
 import { useCurrentAvatar } from '@/components/avatar/CurrentAvatarContext';
+import { useParticipant } from '@/components/participant/ParticipantContext';
 
 import {
   revealSessionVotes,
@@ -57,6 +58,7 @@ export default function SessionView({
   const router = useRouter();
 
   const { seed } = useCurrentAvatar();
+  const { setParticipant } = useParticipant();
   const [estimate, setEstimate] = useState('');
 
   const { execute } = useServerAction(submitVote);
@@ -70,6 +72,12 @@ export default function SessionView({
   const currentUser = session.participants.find(
     (p) => p.userId === currentUserId,
   );
+
+  useEffect(() => {
+    if (!currentUser) return;
+    setParticipant({ id: currentUser.id, role: currentUser.role as 'VOTER' | 'SPECTATOR' });
+    return () => setParticipant(null);
+  }, [currentUser?.id, currentUser?.role, setParticipant]);
 
   const anotherVoterHasSubmitted = session.participants.some(
     (p) =>

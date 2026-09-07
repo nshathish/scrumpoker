@@ -92,6 +92,19 @@ export async function advanceRound(sessionId: string) {
   });
 }
 
+export async function createDeck(name: string, cards: string[]) {
+  return prisma.deck.create({
+    data: { name, cards },
+  });
+}
+
+export async function updateSessionDeck(sessionId: string, deckId: string) {
+  return prisma.session.update({
+    where: { id: sessionId },
+    data: { deckId },
+  });
+}
+
 export async function updateSessionStatusToRevealed(sessionId: string) {
   return prisma.session.update({
     where: { id: sessionId },

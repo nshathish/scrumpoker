@@ -1,18 +1,23 @@
 'use server';
 
 import { notFound, redirect } from 'next/navigation';
+import { revalidatePath } from 'next/cache';
 import { unstable_noStore as noStore } from 'next/cache';
 
 import { getAuthenticatedUser } from '@/lib/auth';
 import {
   addParticipant,
   advanceRound,
+  createDeck,
   createSession,
   findActiveSessionByOwner,
+  findDeckByCards,
   findParticipantById,
   findSessionByInviteCode,
+  findSessionSettingsByInviteCode,
   findSessionWithParticipantsAndVotes,
   getDefaultDeck,
+  updateSessionDeck,
   updateParticipantRole,
   updateSessionStatusToRevealed,
 } from '@/lib/repositories/session';
@@ -169,6 +174,124 @@ export async function switchParticipantRole(
 
   await updateParticipantRole(participantId, newRole);
   return actionSuccess();
+}
+
+type RoomSettingsAccess = {
+  isOwner: boolean;
+  ownerName: string;
+};
+
+type RoomSettings = {
+  deckCards: string[];
+  deckName: string;
+  teamName: string | null;
+};
+
+export async function getRoomSettingsAccess(
+  inviteCode: string,
+): Promise<ActionResult<RoomSettingsAccess>> {
+  const user = await getAuthenticatedUser();
+  if (!user) {
+    return actionError('You must be signed in.');
+  }
+
+  const session = await findSessionSettingsByInviteCode(inviteCode);
+  if (!session) {
+    return actionError('Session not found.');
+  }
+
+  return actionSuccess({
+    isOwner: session.ownerId === user.id,
+    ownerName: session.owner.displayName,
+  });
+}
+
+export async function getRoomSettings(
+  inviteCode: string,
+): Promise<ActionResult<RoomSettings>> {
+  const user = await getAuthenticatedUser();
+  if (!user) {
+    return actionError('You must be signed in.');
+  }
+
+  const session = await findSessionSettingsByInviteCode(inviteCode);
+  if (!session) {
+    return actionError('Session not found.');
+  }
+
+  if (session.ownerId !== user.id) {
+    return actionError('Only the session owner can change room settings.');
+  }
+
+  return actionSuccess({
+    deckCards: session.deck.cards,
+    deckName: session.deck.name,
+    teamName: session.team?.name ?? null,
+  });
+}
+
+function parseDeckCards(value: string) {
+  const seen = new Set<string>();
+
+  return value
+    .split(',')
+    .map((card) => card.trim())
+    .filter((card) => {
+      if (!card || seen.has(card)) return false;
+      seen.add(card);
+      return true;
+    });
+}
+
+function withSelectedExtraVotes(
+  cards: string[],
+  extraVotes: Array<'coffee' | 'question'>,
+) {
+  const values = cards.filter((card) => card !== '☕' && card !== '?');
+  const next = [...values];
+
+  if (extraVotes.includes('coffee')) next.unshift('☕');
+  if (extraVotes.includes('question')) next.push('?');
+
+  return next;
+}
+
+export async function setSessionCustomDeck(
+  inviteCode: string,
+  deckInput: string,
+  extraVotes: Array<'coffee' | 'question'> = [],
+): Promise<ActionResult<{ deckCards: string[] }>> {
+  const user = await getAuthenticatedUser();
+  if (!user) {
+    return actionError('You must be signed in.');
+  }
+
+  const cards = withSelectedExtraVotes(parseDeckCards(deckInput), extraVotes);
+  if (cards.length === 0) {
+    return actionError('Enter at least one card.');
+  }
+
+  const session = await findSessionByInviteCode(inviteCode);
+  if (!session) {
+    return actionError('Session not found.');
+  }
+
+  if (session.ownerId !== user.id) {
+    return actionError('Only the session owner can change room settings.');
+  }
+
+  const existing = await findDeckByCards(cards);
+  const deck =
+    existing ??
+    (await createDeck(
+      `Custom: ${cards.join(', ')}`.slice(0, 72),
+      cards,
+    ).catch(() => createDeck(`Custom ${crypto.randomUUID()}`, cards)));
+
+  await updateSessionDeck(session.id, deck.id);
+  revalidatePath(`/session/${inviteCode}`);
+
+  return actionSuccess({ deckCards: deck.cards });
 }
 
 export async function startNewRound(sessionId: string): Promise<ActionResult> {

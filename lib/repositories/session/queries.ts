@@ -85,3 +85,21 @@ export async function getDefaultDeck() {
     where: { name: 'Fibonacci' },
   });
 }
+
+export async function findDeckByCards(cards: string[]) {
+  return prisma.deck.findFirst({
+    where: { cards: { equals: cards } },
+  });
+}
+
+export async function findSessionSettingsByInviteCode(inviteCode: string) {
+  return prisma.session.findUnique({
+    where: { inviteCode },
+    select: {
+      ownerId: true,
+      owner: { select: { displayName: true } },
+      deck: { select: { name: true, cards: true } },
+      team: { select: { name: true } },
+    },
+  });
+}

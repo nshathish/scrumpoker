@@ -24,7 +24,7 @@ const DECK_PRESETS = [
   '0, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89',
   '2, 4, 8, 16, 24',
   '1, 2, 4, 8, 16, 32, 64',
-  '1, 2, 3, 4, 5, 6, 7, 8',
+  '1, 2, 3, 4',
   '0, 0.5, 1, 2, 3, 5, 8, 13, 20, 40, 100',
   'XS, S, M, L, XL, XXL',
   'Yes, No',
@@ -164,7 +164,8 @@ export default function RoomSettingsPanel({
       setExtraVotes(new Set(extras));
 
       const hasCoffee = deckCards.includes('☕');
-      const hasQuestion = deckCards.includes('?') || deckCards.includes('coffee');
+      const hasQuestion =
+        deckCards.includes('?') || deckCards.includes('coffee');
       if (cards.length > 0 && (!hasCoffee || !hasQuestion)) {
         void setSessionCustomDeck(inviteCode, formatDeck(cards), extras).then(
           (saved) => {
@@ -265,7 +266,9 @@ export default function RoomSettingsPanel({
         </button>
       </header>
 
-      <div className={`room-settings-body${deckPickerOpen ? ' is-deck-open' : ''}`}>
+      <div
+        className={`room-settings-body${deckPickerOpen ? ' is-deck-open' : ''}`}
+      >
         <p className="room-settings-banner">{banner}</p>
 
         <div className="room-settings-field" ref={deckPickerRef}>
@@ -283,7 +286,11 @@ export default function RoomSettingsPanel({
           />
 
           {deckPickerOpen ? (
-            <div className="room-settings-deck-menu" role="listbox" aria-label="Card decks">
+            <div
+              className="room-settings-deck-menu"
+              role="listbox"
+              aria-label="Card decks"
+            >
               {DECK_PRESETS.map((preset) => {
                 const selected = deckInput === preset;
                 return (
@@ -340,7 +347,9 @@ export default function RoomSettingsPanel({
               */}
             </div>
           ) : null}
-          {deckError ? <p className="room-settings-deck-error">{deckError}</p> : null}
+          {deckError ? (
+            <p className="room-settings-deck-error">{deckError}</p>
+          ) : null}
         </div>
 
         <div className="room-settings-field">
@@ -356,7 +365,11 @@ export default function RoomSettingsPanel({
               </button>
             </Tooltip>
           </span>
-          <div className="room-settings-extras" role="group" aria-label="Extra votes">
+          <div
+            className="room-settings-extras"
+            role="group"
+            aria-label="Extra votes"
+          >
             {EXTRA_VOTES.map((vote) => {
               const selected = extraVotes.has(vote.id);
               return (
@@ -396,12 +409,20 @@ export default function RoomSettingsPanel({
                     className={`room-settings-check${checked ? ' is-checked' : ''}`}
                     aria-hidden
                   >
-                    {checked ? <Check className="h-3 w-3" strokeWidth={3} /> : null}
+                    {checked ? (
+                      <Check className="h-3 w-3" strokeWidth={3} />
+                    ) : null}
                   </span>
-                  <span className="room-settings-option-label">{row.label}</span>
+                  <span className="room-settings-option-label">
+                    {row.label}
+                  </span>
                 </label>
                 <Tooltip content={row.hint}>
-                  <button type="button" className="room-settings-info-btn" aria-label={row.hint}>
+                  <button
+                    type="button"
+                    className="room-settings-info-btn"
+                    aria-label={row.hint}
+                  >
                     <Info className="room-settings-info" />
                   </button>
                 </Tooltip>
